@@ -50,7 +50,7 @@ export type Config = {
 }
 
 const themeConfig: Config = {
-  templateName: 'Vuexy',
+  templateName: 'Encore',
   homePageUrl: '/home',
   settingsCookieName: 'vuexy-mui-next-demo-1',
   mode: 'system', // 'system', 'light', 'dark'
