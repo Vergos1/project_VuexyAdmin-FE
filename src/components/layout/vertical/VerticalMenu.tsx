@@ -8,7 +8,7 @@ import PerfectScrollbar from 'react-perfect-scrollbar'
 import type { VerticalMenuContextProps } from '@menu/components/vertical-menu/Menu'
 
 // Component Imports
-import { Menu, MenuItem } from '@menu/vertical-menu'
+import { Menu, MenuItem, MenuSection } from '@menu/vertical-menu'
 
 // Hook Imports
 import useVerticalNav from '@menu/hooks/useVerticalNav'
@@ -69,11 +69,25 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
         menuSectionStyles={menuSectionStyles(verticalNavOptions, theme)}
       >
         <MenuItem href='/home' icon={<i className='tabler-smart-home' />}>
-          Home
+          Dashboards
         </MenuItem>
-        <MenuItem href='/about' icon={<i className='tabler-info-circle' />}>
-          About
-        </MenuItem>
+        {/* <MenuItem href='/home' icon={<i className='tabler-chart-pie-2' />}>
+          Dashboards
+        </MenuItem> */}
+        <MenuSection label='Pages'>
+          <MenuItem href='/user/list' icon={<i className='tabler-user' />}>
+            User management
+          </MenuItem>
+          <MenuItem href='/about' icon={<i className='tabler-layout' />}>
+            Content management
+          </MenuItem>
+          <MenuItem href='/about' icon={<i className='tabler-mail' />}>
+            Push/Email notification
+          </MenuItem>
+          <MenuItem href='/about' icon={<i className='tabler-file-text' />}>
+            User content moderation
+          </MenuItem>
+        </MenuSection>
       </Menu>
       {/* <Menu
         popoutMenuOffset={{ mainAxis: 23 }}

@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react'
 import type { CSSProperties } from 'react'
 
 // Component Imports
-import VuexyLogo from '@core/svg/Logo'
+import EncoreLogo, { LogoSmall } from '@core/svg/Logo'
 
 // Hook Imports
 import useVerticalNav from '@menu/hooks/useVerticalNav'
@@ -39,7 +39,11 @@ const Logo = ({ color = '#F1BB30' }: { color?: CSSProperties['color'] }) => {
 
   return (
     <div className='flex items-center'>
-      <VuexyLogo className='text-2xl' color={color} />
+      {!isBreakpointReached && layout === 'collapsed' ? (
+        <LogoSmall className='block' color={color} />
+      ) : (
+        <EncoreLogo className='block' color={color} />
+      )}
     </div>
   )
 }
