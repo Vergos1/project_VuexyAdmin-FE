@@ -35,7 +35,8 @@ const UserListApp = async () => {
           email: 'jyqJt@example.com',
           role: 'admin',
           currentPlan: 'Moments',
-          status: 'active'
+          status: 'active',
+          memoryStatus: 'added'
         },
         {
           id: 2,
@@ -43,7 +44,8 @@ const UserListApp = async () => {
           email: 'fjyqJfft@example.com',
           role: 'user',
           currentPlan: 'Moments Deluxe (Monthly)',
-          status: 'active'
+          status: 'active',
+          memoryStatus: 'no-added'
         },
         {
           id: 3,
@@ -51,7 +53,8 @@ const UserListApp = async () => {
           email: 'fqjyqJfft@example.com',
           role: 'user',
           currentPlan: 'Moments Deluxe (Monthly)',
-          status: 'unverified'
+          status: 'unverified',
+          memoryStatus: 'added'
         },
         {
           id: 4,
@@ -59,7 +62,8 @@ const UserListApp = async () => {
           email: 'jyqJfft@example.com',
           role: 'user',
           currentPlan: 'Moments Deluxe (Monthly)',
-          status: 'blocked'
+          status: 'blocked',
+          memoryStatus: 'added'
         }
       ]}
     />

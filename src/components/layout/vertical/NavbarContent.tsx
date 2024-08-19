@@ -5,7 +5,9 @@ import classnames from 'classnames'
 
 // Component Imports
 import NavToggle from './NavToggle'
-import ModeDropdown from '@components/layout/shared/ModeDropdown'
+
+// import ModeDropdown from '@components/layout/shared/ModeDropdown'
+
 import UserDropdown from '@components/layout/shared/UserDropdown'
 
 // Util Imports
@@ -16,7 +18,7 @@ const NavbarContent = () => {
     <div className={classnames(verticalLayoutClasses.navbarContent, 'flex items-center justify-between gap-4 is-full')}>
       <div className='flex items-center gap-4'>
         <NavToggle />
-        <ModeDropdown />
+        {/*//? Theme dropdown <ModeDropdown /> */}
       </div>
       <div className='flex items-center'>
         <UserDropdown />

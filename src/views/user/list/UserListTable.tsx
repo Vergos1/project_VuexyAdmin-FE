@@ -221,22 +221,22 @@ const UserListTable = ({ tableData }: { tableData?: any[] }) => {
         header: 'Action',
         cell: ({ row }) => (
           <div className='flex items-center'>
-            <IconButton onClick={() => setData(data?.filter(product => product.id !== row.original.id))}>
+            {/* <IconButton onClick={() => setData(data?.filter(product => product.id !== row.original.id))}>
               <i className='tabler-trash text-textSecondary' />
-            </IconButton>
+            </IconButton> */}
             <OptionMenu
               iconButtonProps={{ size: 'medium' }}
               iconClassName='text-textSecondary'
               options={[
                 {
-                  text: 'Download',
-                  icon: 'tabler-download',
+                  text: 'User details',
+                  icon: 'tabler-info-circle',
                   menuItemProps: { className: 'flex items-center gap-2 text-textSecondary' }
                 },
                 {
-                  text: 'Edit',
-                  icon: 'tabler-edit',
-                  menuItemProps: { className: 'flex items-center gap-2 text-textSecondary' }
+                  text: 'Block user',
+                  icon: 'tabler-circle-x',
+                  menuItemProps: { className: 'flex items-center gap-2 text-error' }
                 }
               ]}
             />

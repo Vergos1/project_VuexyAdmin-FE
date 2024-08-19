@@ -5,6 +5,7 @@ import { useState } from 'react'
 
 // Next Imports
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 
 // MUI Imports
 import useMediaQuery from '@mui/material/useMediaQuery'
@@ -15,7 +16,6 @@ import InputAdornment from '@mui/material/InputAdornment'
 import Checkbox from '@mui/material/Checkbox'
 import Button from '@mui/material/Button'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import Divider from '@mui/material/Divider'
 
 // Third-party Imports
 import classnames from 'classnames'
@@ -35,20 +35,8 @@ import themeConfig from '@configs/themeConfig'
 import { useImageVariant } from '@core/hooks/useImageVariant'
 import { useSettings } from '@core/hooks/useSettings'
 
-// Styled Custom Components
-const LoginIllustration = styled('img')(({ theme }) => ({
-  zIndex: 2,
-  blockSize: 'auto',
-  maxBlockSize: 680,
-  maxInlineSize: '100%',
-  margin: theme.spacing(12),
-  [theme.breakpoints.down(1536)]: {
-    maxBlockSize: 550
-  },
-  [theme.breakpoints.down('lg')]: {
-    maxBlockSize: 450
-  }
-}))
+import TopShapeImg from '../../public/images/illustrations/auth/top-shape-auth.svg'
+import BottomShapeImg from '../../public/images/illustrations/auth/bottom-shape-auth.svg'
 
 const MaskImg = styled('img')({
   blockSize: 'auto',
@@ -66,10 +54,6 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
   // Vars
   const darkImg = '/images/pages/auth-mask-dark.png'
   const lightImg = '/images/pages/auth-mask-light.png'
-  const darkIllustration = '/images/illustrations/auth/v2-login-dark.png'
-  const lightIllustration = '/images/illustrations/auth/v2-login-light.png'
-  const borderedDarkIllustration = '/images/illustrations/auth/v2-login-dark-border.png'
-  const borderedLightIllustration = '/images/illustrations/auth/v2-login-light-border.png'
 
   // Hooks
   const router = useRouter()
@@ -78,19 +62,11 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
   const hidden = useMediaQuery(theme.breakpoints.down('md'))
   const authBackground = useImageVariant(mode, lightImg, darkImg)
 
-  const characterIllustration = useImageVariant(
-    mode,
-    lightIllustration,
-    darkIllustration,
-    borderedLightIllustration,
-    borderedDarkIllustration
-  )
-
   const handleClickShowPassword = () => setIsPasswordShown(show => !show)
 
   return (
     <div className='flex bs-full justify-center'>
-      <div
+      {/* <div
         className={classnames(
           'flex bs-full items-center justify-center flex-1 min-bs-[100dvh] relative p-6 max-md:hidden',
           {
@@ -98,7 +74,6 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
           }
         )}
       >
-        <LoginIllustration src={characterIllustration} alt='character-illustration' />
         {!hidden && (
           <MaskImg
             alt='mask'
@@ -106,12 +81,14 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
             className={classnames({ 'scale-x-[-1]': theme.direction === 'rtl' })}
           />
         )}
-      </div>
-      <div className='flex justify-center items-center bs-full bg-backgroundPaper !min-is-full p-6 md:!min-is-[unset] md:p-12 md:is-[480px]'>
-        <Link className='absolute block-start-5 sm:block-start-[33px] inline-start-6 sm:inline-start-[38px]'>
-          <Logo color='#F1BB30' />
-        </Link>
-        <div className='flex flex-col gap-6 is-full sm:is-auto md:is-full sm:max-is-[400px] md:max-is-[unset] mbs-11 sm:mbs-14 md:mbs-0'>
+      </div> */}
+      <div className='flex justify-center items-center bs-full !min-is-full p-6 md:!min-is-[unset] md:p-12 md:is-[520px] overflow-hidden sm:overflow-visible'>
+        <div className='relative p-10 bg-backgroundPaper flex flex-col gap-6 is-full sm:is-auto md:is-full sm:max-is-[400px] md:max-is-[unset] mbs-11 sm:mbs-14 md:mbs-0'>
+          <Image className='absolute top-[-12%] left-[-17%] z-[-1]' src={TopShapeImg} alt='shape-top' />
+          <Image className='absolute bottom-[-15%] right-[-20%] z-[-1]' src={BottomShapeImg} alt='shape-bottom' />
+          <Link className='flex justify-center items-center block-start-5 sm:block-start-[33px] inline-start-6 sm:inline-start-[38px]'>
+            <Logo color='#F1BB30' />
+          </Link>
           <div className='flex flex-col gap-1'>
             <Typography variant='h4'>{`Welcome to ${themeConfig.templateName}! 👋🏻`}</Typography>
             <Typography>Please sign-in to your account and start the adventure</Typography>
