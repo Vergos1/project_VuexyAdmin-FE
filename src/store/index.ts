@@ -14,7 +14,8 @@ export const store = configureStore({
     // kanbanReducer,
     // emailReducer
   },
-  middleware: getDefaultMiddleware => getDefaultMiddleware({ serializableCheck: false })
+  middleware: getDefaultMiddleware => getDefaultMiddleware({ serializableCheck: false }),
+  devTools: true
 })
 
 export type RootState = ReturnType<typeof store.getState>
