@@ -12,64 +12,26 @@ import UserList from '@/views/user/list'
  */
 
 const getUserData = async () => {
-  // Vars
-  const res = await fetch(`${process.env.API_URL}/users`)
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/users`)
 
-  if (!res.ok) {
-    throw new Error('Failed to fetch userData')
+    if (!res.ok) {
+      throw new Error('Failed to fetch userData')
+    }
+
+    return await res.json()
+  } catch (error) {
+    console.error('Error fetching userData:', error)
+
+    return []
   }
-
-  return res.json()
-} 
+}
 
 const UserListApp = async () => {
   // Vars
-    const data = await getUserData()
-    console.log('data', data)
+  const data = await getUserData()
 
-  return (
-    <UserList
-      // userData={[
-      //   {
-      //     id: 1,
-      //     fullName: 'John Doe',
-      //     email: 'jyqJt@example.com',
-      //     role: 'admin',
-      //     currentPlan: 'Moments',
-      //     status: 'active',
-      //     memoryStatus: 'added'
-      //   },
-      //   {
-      //     id: 2,
-      //     fullName: 'Digi Doe',
-      //     email: 'fjyqJfft@example.com',
-      //     role: 'user',
-      //     currentPlan: 'Moments Deluxe (Monthly)',
-      //     status: 'active',
-      //     memoryStatus: 'no-added'
-      //   },
-      //   {
-      //     id: 3,
-      //     fullName: 'Dorge Djoe',
-      //     email: 'fqjyqJfft@example.com',
-      //     role: 'user',
-      //     currentPlan: 'Moments Deluxe (Monthly)',
-      //     status: 'unverified',
-      //     memoryStatus: 'added'
-      //   },
-      //   {
-      //     id: 4,
-      //     fullName: 'Doge Djoe',
-      //     email: 'jyqJfft@example.com',
-      //     role: 'user',
-      //     currentPlan: 'Moments Deluxe (Monthly)',
-      //     status: 'blocked',
-      //     memoryStatus: 'added'
-      //   }
-      // ]}
-      userData={data}
-    />
-  )
+  return <UserList userData={data} />
 }
 
 export default UserListApp

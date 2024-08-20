@@ -138,6 +138,12 @@ const userStatusObj: UserStatusType = {
 const columnHelper = createColumnHelper<UsersTypeWithAction>()
 
 const UserListTable = ({ tableData }: { tableData?: any[] }) => {
+  //! DELETE
+  console.log('user data:', tableData)
+
+  //! DELETE
+  console.log(process.env.NEXT_PUBLIC_APP_URL, 'env')
+
   // States
   //   const [addUserOpen, setAddUserOpen] = useState(false)
   const [rowSelection, setRowSelection] = useState({})
@@ -173,10 +179,14 @@ const UserListTable = ({ tableData }: { tableData?: any[] }) => {
         header: 'User',
         cell: ({ row }) => (
           <div className='flex items-center gap-4'>
-            {getAvatar({ avatar: row.original.avatar, firstName: row.original.firstName, lastName: row.original.lastName  })}
+            {getAvatar({
+              avatar: row.original.avatar,
+              firstName: row.original.firstName,
+              lastName: row.original.lastName
+            })}
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
-                {row.original.fullName}
+                {row.original.firstName}
               </Typography>
               <Typography variant='body2'>{row.original.username}</Typography>
               <Typography variant='body2'>{row.original.email}</Typography>
@@ -287,6 +297,7 @@ const UserListTable = ({ tableData }: { tableData?: any[] }) => {
       return <CustomAvatar src={avatar} size={34} />
     } else {
       return <CustomAvatar size={34}>{getInitials(`${firstName} ${lastName}`)}</CustomAvatar>
+
       // return <CustomAvatar size={34}>{getInitials(fullName as string)}</CustomAvatar>
     }
   }
@@ -294,28 +305,27 @@ const UserListTable = ({ tableData }: { tableData?: any[] }) => {
   const blockUser = async (id: number) => {
     console.log('Block user', id)
     console.log('URL', `${process.env.API_URL}/users/status/${id}`)
-    // Vars
-    const res = await fetch(`${process.env.API_URL}/users/status/${id}`, {
-      method: 'POST',
-    });
-    
+
+    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/users/status/${id}`, {
+      method: 'POST'
+    })
+
     console.log('Block user', id)
 
     if (res.ok) {
-      const data = await res.json();
-      console.log('Response:', data);
+      const data = await res.json()
+
+      console.log('Response:', data)
     } else {
-      console.error('Error:', res.statusText);
+      console.error('Error:', res.statusText)
     }
 
-  
     if (!res.ok) {
       throw new Error('Failed to fetch userData')
     }
-  
+
     return res.json()
   }
-
 
   return (
     <>
