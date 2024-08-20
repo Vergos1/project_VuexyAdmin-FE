@@ -114,6 +114,7 @@ const OptionMenu = (props: OptionsMenuType) => {
                           {...option.menuItemProps}
                           {...(option.href && { className: 'p-0' })}
                           onClick={e => {
+                            option.onClick()
                             handleClose(e)
                             option.menuItemProps && option.menuItemProps.onClick
                               ? option.menuItemProps.onClick(e)

@@ -11,61 +11,63 @@ import UserList from '@/views/user/list'
  * ! because we've used the server action for getting our static data.
  */
 
-/* const getUserData = async () => {
+const getUserData = async () => {
   // Vars
-  const res = await fetch(`${process.env.API_URL}/apps/user-list`)
+  const res = await fetch(`${process.env.API_URL}/users`)
 
   if (!res.ok) {
     throw new Error('Failed to fetch userData')
   }
 
   return res.json()
-} */
+} 
 
 const UserListApp = async () => {
   // Vars
-  //   const data = await getUserData()
+    const data = await getUserData()
+    console.log('data', data)
 
   return (
     <UserList
-      userData={[
-        {
-          id: 1,
-          fullName: 'John Doe',
-          email: 'jyqJt@example.com',
-          role: 'admin',
-          currentPlan: 'Moments',
-          status: 'active',
-          memoryStatus: 'added'
-        },
-        {
-          id: 2,
-          fullName: 'Digi Doe',
-          email: 'fjyqJfft@example.com',
-          role: 'user',
-          currentPlan: 'Moments Deluxe (Monthly)',
-          status: 'active',
-          memoryStatus: 'no-added'
-        },
-        {
-          id: 3,
-          fullName: 'Dorge Djoe',
-          email: 'fqjyqJfft@example.com',
-          role: 'user',
-          currentPlan: 'Moments Deluxe (Monthly)',
-          status: 'unverified',
-          memoryStatus: 'added'
-        },
-        {
-          id: 4,
-          fullName: 'Doge Djoe',
-          email: 'jyqJfft@example.com',
-          role: 'user',
-          currentPlan: 'Moments Deluxe (Monthly)',
-          status: 'blocked',
-          memoryStatus: 'added'
-        }
-      ]}
+      // userData={[
+      //   {
+      //     id: 1,
+      //     fullName: 'John Doe',
+      //     email: 'jyqJt@example.com',
+      //     role: 'admin',
+      //     currentPlan: 'Moments',
+      //     status: 'active',
+      //     memoryStatus: 'added'
+      //   },
+      //   {
+      //     id: 2,
+      //     fullName: 'Digi Doe',
+      //     email: 'fjyqJfft@example.com',
+      //     role: 'user',
+      //     currentPlan: 'Moments Deluxe (Monthly)',
+      //     status: 'active',
+      //     memoryStatus: 'no-added'
+      //   },
+      //   {
+      //     id: 3,
+      //     fullName: 'Dorge Djoe',
+      //     email: 'fqjyqJfft@example.com',
+      //     role: 'user',
+      //     currentPlan: 'Moments Deluxe (Monthly)',
+      //     status: 'unverified',
+      //     memoryStatus: 'added'
+      //   },
+      //   {
+      //     id: 4,
+      //     fullName: 'Doge Djoe',
+      //     email: 'jyqJfft@example.com',
+      //     role: 'user',
+      //     currentPlan: 'Moments Deluxe (Monthly)',
+      //     status: 'blocked',
+      //     memoryStatus: 'added'
+      //   }
+      // ]}
+      userData={data}
     />
   )
 }
