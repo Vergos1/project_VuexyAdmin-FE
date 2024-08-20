@@ -55,6 +55,7 @@ import { getInitials } from '@/utils/getInitials'
 
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
+import { getFullName } from '@/utils/getFullName'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -186,7 +187,7 @@ const UserListTable = ({ tableData }: { tableData?: any[] }) => {
             })}
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
-                {row.original.firstName}
+                {getFullName(row.original.firstName, row.original.lastName)}
               </Typography>
               <Typography variant='body2'>{row.original.username}</Typography>
               <Typography variant='body2'>{row.original.email}</Typography>
