@@ -173,7 +173,7 @@ const UserListTable = ({ tableData }: { tableData?: any[] }) => {
         header: 'User',
         cell: ({ row }) => (
           <div className='flex items-center gap-4'>
-            {getAvatar({ avatar: row.original.avatar, fullName: row.original.fullName })}
+            {getAvatar({ avatar: row.original.avatar, firstName: row.original.firstName, lastName: row.original.lastName  })}
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
                 {row.original.fullName}
@@ -231,12 +231,14 @@ const UserListTable = ({ tableData }: { tableData?: any[] }) => {
                 {
                   text: 'User details',
                   icon: 'tabler-info-circle',
-                  menuItemProps: { className: 'flex items-center gap-2 text-textSecondary' }
+                  menuItemProps: { className: 'flex items-center gap-2 text-textSecondary' },
+                  onClick: () => console.log('User details')
                 },
                 {
                   text: 'Block user',
                   icon: 'tabler-circle-x',
-                  menuItemProps: { className: 'flex items-center gap-2 text-error' }
+                  menuItemProps: { className: 'flex items-center gap-2 text-error' },
+                  onClick: () => blockUser(row.original.id)
                 }
               ]}
             />
@@ -278,15 +280,42 @@ const UserListTable = ({ tableData }: { tableData?: any[] }) => {
     getFacetedMinMaxValues: getFacetedMinMaxValues()
   })
 
-  const getAvatar = (params: Pick<any, 'avatar' | 'fullName'>) => {
-    const { avatar, fullName } = params
+  const getAvatar = (params: Pick<any, 'avatar' | 'firstName' | 'lastName'>) => {
+    const { avatar, firstName, lastName } = params
 
     if (avatar) {
       return <CustomAvatar src={avatar} size={34} />
     } else {
-      return <CustomAvatar size={34}>{getInitials(fullName as string)}</CustomAvatar>
+      return <CustomAvatar size={34}>{getInitials(`${firstName} ${lastName}`)}</CustomAvatar>
+      // return <CustomAvatar size={34}>{getInitials(fullName as string)}</CustomAvatar>
     }
   }
+
+  const blockUser = async (id: number) => {
+    console.log('Block user', id)
+    console.log('URL', `${process.env.API_URL}/users/status/${id}`)
+    // Vars
+    const res = await fetch(`${process.env.API_URL}/users/status/${id}`, {
+      method: 'POST',
+    });
+    
+    console.log('Block user', id)
+
+    if (res.ok) {
+      const data = await res.json();
+      console.log('Response:', data);
+    } else {
+      console.error('Error:', res.statusText);
+    }
+
+  
+    if (!res.ok) {
+      throw new Error('Failed to fetch userData')
+    }
+  
+    return res.json()
+  }
+
 
   return (
     <>

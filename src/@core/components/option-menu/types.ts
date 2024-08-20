@@ -22,6 +22,7 @@ export type OptionDividerType = {
 }
 export type OptionMenuItemType = {
   text: ReactNode
+  onClick: () => void
   icon?: ReactNode
   linkProps?: BoxProps
   href?: LinkProps['href']
