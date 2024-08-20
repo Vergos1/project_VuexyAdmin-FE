@@ -1,8 +1,6 @@
 // Component Imports
-import UserList from '@/views/user/list'
-
-// Data Imports
-// import { getUserData } from '@/app/server/actions'
+import api from '../../../../api/api'
+import UserList from '../../../../views/user/list'
 
 /**
  * ! If you need data using an API call, uncomment the below API code, update the `process.env.API_URL` variable in the
@@ -11,25 +9,20 @@ import UserList from '@/views/user/list'
  * ! because we've used the server action for getting our static data.
  */
 
-const getUserData = async () => {
+const getUsersList = async () => {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/users`)
+    const { data } = await api.usersManagement.getUsersList()
 
-    if (!res.ok) {
-      throw new Error('Failed to fetch userData')
-    }
-
-    return await res.json()
+    return data
   } catch (error) {
-    console.error('Error fetching userData:', error)
+    console.error(error)
 
     return []
   }
 }
 
 const UserListApp = async () => {
-  // Vars
-  const data = await getUserData()
+  const data = await getUsersList()
 
   return <UserList userData={data} />
 }
