@@ -142,9 +142,6 @@ const UserListTable = ({ tableData }: { tableData?: any[] }) => {
   //! DELETE
   console.log('user data:', tableData)
 
-  //! DELETE
-  console.log(process.env.NEXT_PUBLIC_APP_URL, 'env')
-
   // States
   //   const [addUserOpen, setAddUserOpen] = useState(false)
   const [rowSelection, setRowSelection] = useState({})

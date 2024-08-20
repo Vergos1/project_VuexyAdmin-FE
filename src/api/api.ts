@@ -1,12 +1,13 @@
 import axios from 'axios'
+import Cookies from 'js-cookie'
 
 import authService from './services/auth'
 import userManagementService from './services/usersManagement'
 
-export const API_URL = process.env.NEXT_PUBLIC_API_URL
-export const TOKEN = localStorage.getItem('TOKEN') || sessionStorage.getItem('TOKEN')
+// export const API_URL = process.env.NEXT_PUBLIC_API_URL
+export const API_URL = 'https://d6a8-91-196-178-204.ngrok-free.app'
 
-console.log('AUTHORIZE TOKEN:', TOKEN ? TOKEN : 'NO TOKEN')
+export const TOKEN = Cookies.get('TOKEN')
 
 export const AXIOS_INSTANCE = axios.create({
   baseURL: API_URL,
@@ -16,9 +17,9 @@ export const AXIOS_INSTANCE = axios.create({
 })
 
 AXIOS_INSTANCE.interceptors.request.use(config => {
-  const token = localStorage.getItem('TOKEN') || sessionStorage.getItem('TOKEN')
+  const token = Cookies.get('TOKEN') || ''
 
-  config.headers.Authorization = token ? `Bearer ${token}` : ''
+  config.headers.Authorization = `Bearer ${token}`
 
   return config
 })
