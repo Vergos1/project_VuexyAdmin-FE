@@ -3,6 +3,7 @@
 import CustomTabList from '@/@core/components/mui/TabList'
 import ContentTabs from '@/views/content/categories/Tabs'
 import CategoryListTable from '@/views/content/categories/CategoryListTable'
+import CategoryList from '@/views/content/categories'
 
 const mockData = [
   {

@@ -1,14 +1,9 @@
 'use client'
 
-import type { SyntheticEvent } from 'react'
-import { useState } from 'react'
-
-import { TabContext, TabList } from '@mui/lab'
 import { Breadcrumbs, Link, Tab, Tabs, Typography } from '@mui/material'
 
-import CustomTabList from '@/@core/components/mui/TabList'
 import ContentTabs from '@/views/content/categories/Tabs'
-import CategoryListTable from '@/views/content/categories/CategoryListTable'
+import SubcategoryListTable from '@/views/content/categories/subcategories/SubcategoryListTable'
 
 const mockData = {
   id: '8258e360-7377-489e-a563-d59ddcc0d8f6',
@@ -41,7 +36,7 @@ export default function Page() {
         </Link>
         <Typography className='text-textPrimary'>{mockData.name}</Typography>
       </Breadcrumbs>
-      <CategoryListTable tableData={mockData.subcategories} />
+      <SubcategoryListTable title={mockData.name} tableData={mockData.subcategories} />
     </div>
   )
 }

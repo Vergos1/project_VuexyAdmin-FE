@@ -2,16 +2,16 @@
 import Grid from '@mui/material/Grid'
 
 // Component Imports
-import UserListTable from './CategoryListTable'
+import CategoryListTable from './CategoryListTable'
 
-const ContentList = ({ userData }: { userData?: any[] }) => {
+const CategoryList = ({ categoryData }: { categoryData?: any[] }) => {
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
-        <UserListTable tableData={userData} />
+        <CategoryListTable tableData={categoryData} />
       </Grid>
     </Grid>
   )
 }
 
-export default ContentList
+export default CategoryList

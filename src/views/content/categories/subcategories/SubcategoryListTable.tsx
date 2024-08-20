@@ -11,7 +11,6 @@ import { useRouter } from 'next/navigation'
 
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
-import type { ButtonProps } from '@mui/material/Button'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import Chip from '@mui/material/Chip'
@@ -55,8 +54,6 @@ import { getInitials } from '@/utils/getInitials'
 
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
-import OpenDialogOnElementClick from '@/components/dialogs/OpenDialogOnElementClick'
-import AddNewCategory from '@/components/dialogs/add-new-category'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -95,12 +92,11 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
 // Column Definitions
 const columnHelper = createColumnHelper<UsersTypeWithAction>()
 
-const CategoryListTable = ({ tableData }: { tableData?: any[] }) => {
+const SubcategoryListTable = ({ title, tableData }: { title: string; tableData?: any[] }) => {
   //Init
   const router = useRouter()
 
   // States
-  //   const [addUserOpen, setAddUserOpen] = useState(false)
   const [rowSelection, setRowSelection] = useState({})
   const [data, setData] = useState(...[tableData])
   const [globalFilter, setGlobalFilter] = useState('')
@@ -158,36 +154,25 @@ const CategoryListTable = ({ tableData }: { tableData?: any[] }) => {
     getFacetedMinMaxValues: getFacetedMinMaxValues()
   })
 
-  const redirectToSubCategory = (id: string) => {
-    router.push(`/content/categories/subcategories`)
+  const redirectToQuestions = (id: string) => {
+    router.push(`/content/categories/subcategories/questions`)
   }
-
-  const buttonProps = (children: string, color: ThemeColor, variant: ButtonProps['variant']): ButtonProps => ({
-    children,
-    color,
-    variant
-  })
 
   return (
     <>
       <Card>
         <div className='flex items-center justify-between'>
-          <CardHeader title='Categories' className='p-6' />
+          <CardHeader title={title} className='p-6' />
 
           <div className='p-6'>
-            {/* <Button
+            <Button
               variant='contained'
               startIcon={<i className='tabler-plus' />}
               onClick={() => {}}
               className='max-sm:is-full'
             >
-              Add Category
-            </Button> */}
-            <OpenDialogOnElementClick
-              element={Button}
-              elementProps={buttonProps('Add Category', 'primary', 'contained')}
-              dialog={AddNewCategory}
-            />
+              Add Subcategory
+            </Button>
           </div>
         </div>
         <div className='overflow-x-auto'>
@@ -208,7 +193,7 @@ const CategoryListTable = ({ tableData }: { tableData?: any[] }) => {
                   .map(row => {
                     return (
                       <tr
-                        onClick={() => redirectToSubCategory(row.original.id)}
+                        onClick={() => redirectToQuestions(row.original.id)}
                         key={row.id}
                         className={
                           (classnames({
@@ -243,4 +228,4 @@ const CategoryListTable = ({ tableData }: { tableData?: any[] }) => {
   )
 }
 
-export default CategoryListTable
+export default SubcategoryListTable
