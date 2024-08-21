@@ -6,18 +6,17 @@ const authService = {
   async checkStatus() {
     return await AXIOS_INSTANCE.get(`${BASE_URL}/status`)
   },
+  async login({ email, password }: { email: string; password: string }) {
+    return await AXIOS_INSTANCE.post(`${BASE_URL}/login`, {
+      email,
+      password
+    })
+  },
   async registration({ username, password, email, rememberMe, refCode }: any) {
     return await AXIOS_INSTANCE.post(`${BASE_URL}/signup?refCode=${refCode}`, {
       username,
       password,
       email,
-      rememberMe
-    })
-  },
-  async login({ username, password, rememberMe }: any) {
-    return await AXIOS_INSTANCE.post(`${BASE_URL}/login`, {
-      username,
-      password,
       rememberMe
     })
   },

@@ -7,6 +7,8 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 
+import { useDispatch } from 'react-redux'
+
 // MUI Imports
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { styled, useTheme } from '@mui/material/styles'
@@ -20,6 +22,10 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 // Third-party Imports
 import classnames from 'classnames'
 
+import { useForm } from 'react-hook-form'
+
+import type { FieldValues, SubmitHandler } from 'react-hook-form'
+
 // Type Imports
 import type { SystemMode } from '@core/types'
 
@@ -31,10 +37,12 @@ import CustomTextField from '@core/components/mui/TextField'
 // Config Imports
 import themeConfig from '@configs/themeConfig'
 
+import type { AppDispatch } from '@/store/index'
+
 // Hook Imports
 import { useImageVariant } from '@core/hooks/useImageVariant'
 import { useSettings } from '@core/hooks/useSettings'
-
+import { loginThunk } from '@/store/slices/auth'
 import TopShapeImg from '../../public/images/illustrations/auth/top-shape-auth.svg'
 import BottomShapeImg from '../../public/images/illustrations/auth/bottom-shape-auth.svg'
 
@@ -56,6 +64,13 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
   const lightImg = '/images/pages/auth-mask-light.png'
 
   // Hooks
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm()
+
+  const dispatch = useDispatch<AppDispatch>()
   const router = useRouter()
   const { settings } = useSettings()
   const theme = useTheme()
@@ -64,11 +79,18 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
 
   const handleClickShowPassword = () => setIsPasswordShown(show => !show)
 
+  const handleLogin: SubmitHandler<FieldValues> = async data => {
+    const { email, password } = data as { email: string; password: string }
+
+    if (!email || !password) return
+    dispatch(loginThunk({ email, password }))
+  }
+
   return (
     <div className='flex bs-full justify-center'>
       {/* <div
         className={classnames(
-          'flex bs-full items-center justify-center flex-1 min-bs-[100dvh] relative p-6 max-md:hidden',
+          'flex bs-full items-center just   ify-center flex-1 min-bs-[100dvh] relative p-6 max-md:hidden',
           {
             'border-ie': settings.skin === 'bordered'
           }
@@ -93,22 +115,21 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
             <Typography variant='h4'>{`Welcome to ${themeConfig.templateName}! 👋🏻`}</Typography>
             <Typography>Please sign-in to your account and start the adventure</Typography>
           </div>
-          <form
-            noValidate
-            autoComplete='off'
-            onSubmit={e => {
-              e.preventDefault()
-              router.push('/')
-            }}
-            className='flex flex-col gap-5'
-          >
-            <CustomTextField autoFocus fullWidth label='Email or Username' placeholder='Enter your email or username' />
+          <form noValidate autoComplete='off' onSubmit={handleSubmit(handleLogin)} className='flex flex-col gap-5'>
+            <CustomTextField
+              autoFocus
+              fullWidth
+              label='Email'
+              placeholder='Enter your email'
+              {...register('email', { required: true })}
+            />
             <CustomTextField
               fullWidth
               label='Password'
               placeholder='············'
               id='outlined-adornment-password'
               type={isPasswordShown ? 'text' : 'password'}
+              {...register('password', { required: true })}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position='end'>

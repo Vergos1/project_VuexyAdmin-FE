@@ -1,6 +1,6 @@
 // Component Imports
-import api from '../../../../api/api'
-import UserList from '../../../../views/user/list'
+import api from '@/api/api'
+import UserList from '@/views/user/list'
 
 /**
  * ! If you need data using an API call, uncomment the below API code, update the `process.env.API_URL` variable in the
