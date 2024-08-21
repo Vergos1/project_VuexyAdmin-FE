@@ -1,7 +1,7 @@
 import React from 'react'
 
-const Page = () => {
+const Prompt = () => {
   return <div>Prompt for AI</div>
 }
 
-export default Page
+export default Prompt
