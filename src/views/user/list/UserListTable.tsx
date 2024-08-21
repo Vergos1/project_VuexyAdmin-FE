@@ -43,7 +43,7 @@ import type { ThemeColor } from '@core/types'
 // Component Imports
 import TableFilters from './TableFilters'
 
-// import AddUserDrawer from './AddUserDrawer'
+import UserInfoDrawer from './UserInfoDrawer'
 
 import OptionMenu from '@core/components/option-menu'
 import TablePaginationComponent from '@/components/TablePaginationComponent'
@@ -82,16 +82,19 @@ type UserStatusType = {
 const Icon = styled('i')({})
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
-  // Rank the item
-  const itemRank = rankItem(row.getValue(columnId), value)
+  const firstName = row.original.firstName
+  const lastName = row.original.lastName
+  const email = row.original.email
 
-  // Store the itemRank info
-  addMeta({
-    itemRank
-  })
+  const firstNameRank = rankItem(firstName, value)
+  const lastNameRank = rankItem(lastName, value)
+  const emailRank = rankItem(email, value)
 
-  // Return if the item should be filtered in/out
-  return itemRank.passed
+  if (firstNameRank.passed || lastNameRank.passed || emailRank.passed) {
+    return true
+  }
+
+  return false
 }
 
 const DebouncedInput = ({
@@ -143,7 +146,7 @@ const UserListTable = ({ tableData }: { tableData?: any[] }) => {
   console.log('user data:', tableData)
 
   // States
-  //   const [addUserOpen, setAddUserOpen] = useState(false)
+  const [addUserOpen, setAddUserOpen] = useState(false)
   const [rowSelection, setRowSelection] = useState({})
   const [data, setData] = useState(...[tableData])
   const [filteredData, setFilteredData] = useState(data)
@@ -173,7 +176,7 @@ const UserListTable = ({ tableData }: { tableData?: any[] }) => {
           />
         )
       },
-      columnHelper.accessor('fullName', {
+      columnHelper.accessor('info', {
         header: 'User',
         cell: ({ row }) => (
           <div className='flex items-center gap-4'>
@@ -186,7 +189,6 @@ const UserListTable = ({ tableData }: { tableData?: any[] }) => {
               <Typography color='text.primary' className='font-medium'>
                 {getFullName(row.original.firstName, row.original.lastName)}
               </Typography>
-              <Typography variant='body2'>{row.original.username}</Typography>
               <Typography variant='body2'>{row.original.email}</Typography>
             </div>
           </div>
@@ -240,7 +242,7 @@ const UserListTable = ({ tableData }: { tableData?: any[] }) => {
                   text: 'User details',
                   icon: 'tabler-info-circle',
                   menuItemProps: { className: 'flex items-center gap-2 text-textSecondary' },
-                  onClick: () => console.log('User details')
+                  onClick: () => setAddUserOpen(true)
                 },
                 {
                   text: 'Block user',
@@ -431,12 +433,12 @@ const UserListTable = ({ tableData }: { tableData?: any[] }) => {
           }}
         />
       </Card>
-      {/* <AddUserDrawer
+      <UserInfoDrawer
         open={addUserOpen}
         handleClose={() => setAddUserOpen(!addUserOpen)}
         userData={data}
         setData={setData}
-      /> */}
+      />
     </>
   )
 }

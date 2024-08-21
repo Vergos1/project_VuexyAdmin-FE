@@ -15,7 +15,7 @@ import CustomTabList from '@core/components/mui/TabList'
 
 const ContentTabs = () => {
   // States
-  const [activeTab, setActiveTab] = useState('overview')
+  const [activeTab, setActiveTab] = useState('categories')
 
   const handleChange = (event: SyntheticEvent, value: string) => {
     setActiveTab(value)

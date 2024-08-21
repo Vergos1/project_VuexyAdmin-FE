@@ -12,6 +12,7 @@ import Grid from '@mui/material/Grid'
 
 // Component Imports
 import CustomTabList from '@core/components/mui/TabList'
+import CategoryList from './categories'
 
 const ContentTabs = () => {
   // States
@@ -38,6 +39,23 @@ const ContentTabs = () => {
             label='Push notifications templates'
             iconPosition='start'
           />
+          {activeTab === 'categories' && (
+            <TabPanel value='categories'>
+              <CategoryList />
+            </TabPanel>
+          )}
+          {activeTab === 'promptForAI' && (
+            <TabPanel value='promptForAI'>
+              <h2>Prompt for AI</h2>
+              <p>This is the prompt for AI tab.</p>
+            </TabPanel>
+          )}
+          {activeTab === 'pushNotificationsTemplates' && (
+            <TabPanel value='pushNotificationsTemplates'>
+              <h2>Push notifications templates</h2>
+              <p>This is the push notifications templates tab.</p>
+            </TabPanel>
+          )}
         </CustomTabList>
       </TabContext>
     </>
