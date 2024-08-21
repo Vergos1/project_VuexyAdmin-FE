@@ -204,10 +204,6 @@ const QuestionListTable = ({ title, tableData }: { title: string; tableData?: an
     getFacetedMinMaxValues: getFacetedMinMaxValues(),
   });
 
-  const redirectToSubCategory = (id: string) => {
-    router.push(`/content/categories/subcategories`);
-  };
-
   const buttonProps = (
     children: string | ReactNode,
     color?: ThemeColor,
@@ -276,7 +272,6 @@ const QuestionListTable = ({ title, tableData }: { title: string; tableData?: an
                   .map((row) => {
                     return (
                       <tr
-                        onClick={() => redirectToSubCategory(row.original.id)}
                         key={row.id}
                         className={
                           (classnames({

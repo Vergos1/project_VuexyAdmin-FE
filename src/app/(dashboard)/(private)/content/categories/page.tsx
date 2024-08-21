@@ -1,66 +1,43 @@
 'use client'
 
+// Component Imports
 import CustomTabList from '@/@core/components/mui/TabList'
-import ContentTabs from '@/views/content/categories/Tabs'
 import CategoryListTable from '@/views/content/categories/CategoryListTable'
 import CategoryList from '@/views/content/categories'
 
-const mockData = [
-  {
-    id: 'de125500-ff99-40d6-bbd7-92a743b6c154',
-    name: 'Self',
-    createdAt: '2024-08-02T12:50:17.838Z',
-    updatedAt: '2024-08-02T12:50:17.838Z'
-  },
-  {
-    id: '15853510-d138-433a-90eb-410b9b9019bc',
-    name: 'Partner',
-    createdAt: '2024-08-02T12:50:17.838Z',
-    updatedAt: '2024-08-02T12:50:17.838Z'
-  },
-  {
-    id: 'f05af854-cf5d-4d53-a5cb-159274088867',
-    name: 'Parent',
-    createdAt: '2024-08-02T12:50:17.838Z',
-    updatedAt: '2024-08-02T12:50:17.838Z'
-  },
-  {
-    id: 'de125500-ff99-40d6-bbd7-92a743b6c154',
-    name: 'Self',
-    createdAt: '2024-08-02T12:50:17.838Z',
-    updatedAt: '2024-08-02T12:50:17.838Z'
-  },
-  {
-    id: '15853510-d138-433a-90eb-410b9b9019bc',
-    name: 'Partner',
-    createdAt: '2024-08-02T12:50:17.838Z',
-    updatedAt: '2024-08-02T12:50:17.838Z'
-  },
-  {
-    id: 'f05af854-cf5d-4d53-a5cb-159274088867',
-    name: 'Parent',
-    createdAt: '2024-08-02T12:50:17.838Z',
-    updatedAt: '2024-08-02T12:50:17.838Z'
-  },
-  {
-    id: 'de125500-ff99-40d6-bbd7-92a743b6c154',
-    name: 'Self',
-    createdAt: '2024-08-02T12:50:17.838Z',
-    updatedAt: '2024-08-02T12:50:17.838Z'
-  },
-  {
-    id: '15853510-d138-433a-90eb-410b9b9019bc',
-    name: 'Partner',
-    createdAt: '2024-08-02T12:50:17.838Z',
-    updatedAt: '2024-08-02T12:50:17.838Z'
-  }
-]
+import api from '@/api/api'
+import { useEffect, useState } from 'react'
+import BlankLayout from '@/@layouts/BlankLayout'
+import LayoutContent from '../layout'
 
-export default function Page() {
+
+
+
+
+const CategoriesList = () => {
+  const [data, setData] = useState([])
+
+  const fetchCategories = async () => {
+    try {
+      const {data} = await api.contentManagement.getCategoriesList()
+      setData(data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  useEffect(() => {
+    fetchCategories()
+  }, [])
+
+  console.log(data, 'data')
+
+
   return (
     <div className='flex flex-col gap-6'>
-      <ContentTabs />
-      <CategoryListTable tableData={mockData} />
+      <CategoryListTable tableData={data} />
     </div>
   )
 }
+
+export default CategoriesList

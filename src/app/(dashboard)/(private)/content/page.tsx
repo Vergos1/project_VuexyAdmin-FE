@@ -1,28 +1,29 @@
 'use client'
 
-// React Imports
-import { useState } from 'react'
-import type { SyntheticEvent, ReactElement } from 'react'
-
-// MUI Imports
-import Tab from '@mui/material/Tab'
-import TabContext from '@mui/lab/TabContext'
-import TabPanel from '@mui/lab/TabPanel'
-import Grid from '@mui/material/Grid'
-
 // Component Imports
-import CustomTabList from '@core/components/mui/TabList'
+import CustomTabList from '@/@core/components/mui/TabList'
 
-const ContentTabs = () => {
+import { TabContext, TabPanel } from '@mui/lab'
+import { SyntheticEvent, useState } from 'react'
+import { Grid, Tab } from '@mui/material'
+import CategoriesList from './categories/page'
+import Prompt from '@/views/content/prompt'
+
+const tabContentList = {
+  categories: <CategoriesList />,
+  pushNotificationsTemplates: <Prompt />
+}
+
+const ContentManagement = () => {
   // States
-  const [activeTab, setActiveTab] = useState('overview')
+  const [activeTab, setActiveTab] = useState('promptForAI')
 
   const handleChange = (event: SyntheticEvent, value: string) => {
     setActiveTab(value)
   }
 
   return (
-    <>
+    <div className='flex flex-col gap-6'>
       <TabContext value={activeTab}>
         <CustomTabList onChange={handleChange} variant='scrollable' pill='true'>
           <Tab icon={<i className='tabler-versions' />} value='categories' label='Categories' iconPosition='start' />
@@ -39,9 +40,14 @@ const ContentTabs = () => {
             iconPosition='start'
           />
         </CustomTabList>
+        <Grid item xs={12}>
+          <TabPanel value={activeTab} className='p-0'>
+            {tabContentList[activeTab]}
+          </TabPanel>
+        </Grid>
       </TabContext>
-    </>
+    </div>
   )
 }
 
-export default ContentTabs
+export default ContentManagement
