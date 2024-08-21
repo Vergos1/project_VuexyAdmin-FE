@@ -1,6 +1,7 @@
 'use client'
 
 // React Imports
+import type { ReactNode } from 'react'
 import { useState, useMemo } from 'react'
 
 // Next Imports
@@ -56,7 +57,8 @@ import { getInitials } from '@/utils/getInitials'
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
 import OpenDialogOnElementClick from '@/components/dialogs/OpenDialogOnElementClick'
-import AddNewCategory from '@/components/dialogs/add-new-category'
+import AddNewCategory from '@/components/dialogs/add-edit-category'
+import ActionModal from '@/components/dialogs/action-modal'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -102,7 +104,8 @@ const CategoryListTable = ({ tableData }: { tableData?: any[] }) => {
   // States
   //   const [addUserOpen, setAddUserOpen] = useState(false)
   const [rowSelection, setRowSelection] = useState({})
-  const [data, setData] = useState(...[tableData])
+
+  // const [data, setData] = useState(...[tableData]);
   const [globalFilter, setGlobalFilter] = useState('')
 
   const columns = useMemo<ColumnDef<UsersTypeWithAction, any>[]>(
@@ -118,23 +121,39 @@ const CategoryListTable = ({ tableData }: { tableData?: any[] }) => {
       columnHelper.accessor('action', {
         header: '',
         cell: ({}) => (
-          <div className='flex items-center justify-end gap-2 pr-[30px]'>
-            <IconButton onClick={() => {}}>
-              <i className='tabler-edit' />
-            </IconButton>
-            <IconButton onClick={() => {}}>
-              <i className='tabler-trash' />
-            </IconButton>
+          <div onClick={e => e.stopPropagation()} className='flex items-center justify-end gap-2 pr-[30px]'>
+            <OpenDialogOnElementClick
+              element={IconButton}
+              elementProps={buttonProps(<i className='tabler-edit' />)}
+              dialog={AddNewCategory}
+              dialogProps={{
+                title: 'Edit Category',
+                inputLabel: 'Сategory name',
+                placeholder: 'Edit category',
+                onSubmit: (value: string) => console.log(value)
+              }}
+            />
+            <OpenDialogOnElementClick
+              element={IconButton}
+              elementProps={buttonProps(<i className='tabler-trash' />)}
+              dialog={ActionModal}
+              dialogProps={{
+                title: 'Delete an item?',
+                text: "Are you sure you want to delete this item? You can't undo this action.",
+                onSubmit: (value: string) => console.log(value),
+                actionText: 'Delete'
+              }}
+            />
           </div>
         )
       })
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [data]
+    [tableData]
   )
 
   const table = useReactTable({
-    data: data as any[],
+    data: tableData as any[],
     columns: columns,
     filterFns: {
       fuzzy: fuzzyFilter
@@ -162,10 +181,16 @@ const CategoryListTable = ({ tableData }: { tableData?: any[] }) => {
     router.push(`/content/categories/subcategories`)
   }
 
-  const buttonProps = (children: string, color: ThemeColor, variant: ButtonProps['variant']): ButtonProps => ({
+  const buttonProps = (
+    children: string | ReactNode,
+    color?: ThemeColor,
+    variant?: ButtonProps['variant'],
+    startIcon?: ReactNode
+  ): ButtonProps => ({
     children,
     color,
-    variant
+    variant,
+    startIcon
   })
 
   return (
@@ -185,11 +210,18 @@ const CategoryListTable = ({ tableData }: { tableData?: any[] }) => {
             </Button> */}
             <OpenDialogOnElementClick
               element={Button}
-              elementProps={buttonProps('Add Category', 'primary', 'contained')}
+              elementProps={buttonProps('Add Category', 'primary', 'contained', <i className='tabler-plus' />)}
               dialog={AddNewCategory}
+              dialogProps={{
+                title: 'Add New Category',
+                inputLabel: 'Category Name',
+                placeholder: 'Name',
+                onSubmit: (value: string) => console.log(value)
+              }}
             />
           </div>
         </div>
+
         <div className='overflow-x-auto'>
           <table className={tableStyles.table}>
             {table.getFilteredRowModel().rows.length === 0 ? (

@@ -3,6 +3,7 @@ import Cookies from 'js-cookie'
 
 import authService from './services/auth'
 import userManagementService from './services/usersManagement'
+import contentManagementService from './services/contentManagement'
 
 // export const API_URL = process.env.NEXT_PUBLIC_API_URL
 export const API_URL = 'https://8aac-91-196-178-204.ngrok-free.app/'
@@ -26,7 +27,8 @@ AXIOS_INSTANCE.interceptors.request.use(config => {
 
 const api = {
   auth: authService,
-  usersManagement: userManagementService
+  usersManagement: userManagementService,
+  contentManagement: contentManagementService
 }
 
 export default api

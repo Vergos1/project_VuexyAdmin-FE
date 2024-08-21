@@ -1,65 +1,53 @@
 'use client'
 
+// Component Imports
 import CustomTabList from '@/@core/components/mui/TabList'
-import ContentTabs from '@/views/content/categories/Tabs'
-import CategoryListTable from '@/views/content/categories/CategoryListTable'
-import CategoryList from '@/views/content/categories'
 
-const mockData = [
-  {
-    id: 'de125500-ff99-40d6-bbd7-92a743b6c154',
-    name: 'Self',
-    createdAt: '2024-08-02T12:50:17.838Z',
-    updatedAt: '2024-08-02T12:50:17.838Z'
-  },
-  {
-    id: '15853510-d138-433a-90eb-410b9b9019bc',
-    name: 'Partner',
-    createdAt: '2024-08-02T12:50:17.838Z',
-    updatedAt: '2024-08-02T12:50:17.838Z'
-  },
-  {
-    id: 'f05af854-cf5d-4d53-a5cb-159274088867',
-    name: 'Parent',
-    createdAt: '2024-08-02T12:50:17.838Z',
-    updatedAt: '2024-08-02T12:50:17.838Z'
-  },
-  {
-    id: 'de125500-ff99-40d6-bbd7-92a743b6c154',
-    name: 'Self',
-    createdAt: '2024-08-02T12:50:17.838Z',
-    updatedAt: '2024-08-02T12:50:17.838Z'
-  },
-  {
-    id: '15853510-d138-433a-90eb-410b9b9019bc',
-    name: 'Partner',
-    createdAt: '2024-08-02T12:50:17.838Z',
-    updatedAt: '2024-08-02T12:50:17.838Z'
-  },
-  {
-    id: 'f05af854-cf5d-4d53-a5cb-159274088867',
-    name: 'Parent',
-    createdAt: '2024-08-02T12:50:17.838Z',
-    updatedAt: '2024-08-02T12:50:17.838Z'
-  },
-  {
-    id: 'de125500-ff99-40d6-bbd7-92a743b6c154',
-    name: 'Self',
-    createdAt: '2024-08-02T12:50:17.838Z',
-    updatedAt: '2024-08-02T12:50:17.838Z'
-  },
-  {
-    id: '15853510-d138-433a-90eb-410b9b9019bc',
-    name: 'Partner',
-    createdAt: '2024-08-02T12:50:17.838Z',
-    updatedAt: '2024-08-02T12:50:17.838Z'
+import { TabContext, TabPanel } from '@mui/lab'
+import { SyntheticEvent, useState } from 'react'
+import { Grid, Tab } from '@mui/material'
+import CategoriesList from './categories/page'
+import Prompt from '@/views/content/prompt'
+
+const tabContentList = {
+  categories: <CategoriesList />,
+  pushNotificationsTemplates: <Prompt />
+}
+
+const ContentManagement = () => {
+  // States
+  const [activeTab, setActiveTab] = useState('promptForAI')
+
+  const handleChange = (event: SyntheticEvent, value: string) => {
+    setActiveTab(value)
   }
-]
 
-export default function Page() {
   return (
     <div className='flex flex-col gap-6'>
-      <ContentTabs />
+      <TabContext value={activeTab}>
+        <CustomTabList onChange={handleChange} variant='scrollable' pill='true'>
+          <Tab icon={<i className='tabler-versions' />} value='categories' label='Categories' iconPosition='start' />
+          <Tab
+            icon={<i className='tabler-message-2' />}
+            value='promptForAI'
+            label='Prompt for AI'
+            iconPosition='start'
+          />
+          <Tab
+            icon={<i className='tabler-bell' />}
+            value='pushNotificationsTemplates'
+            label='Push notifications templates'
+            iconPosition='start'
+          />
+        </CustomTabList>
+        <Grid item xs={12}>
+          <TabPanel value={activeTab} className='p-0'>
+            {tabContentList[activeTab]}
+          </TabPanel>
+        </Grid>
+      </TabContext>
     </div>
   )
 }
+
+export default ContentManagement
