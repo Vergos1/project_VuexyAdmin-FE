@@ -153,7 +153,7 @@ const CategoryListTable = ({ tableData }: { tableData?: any[] }) => {
   )
 
   const table = useReactTable({
-    data: tableData as any[],
+    data: tableData || ([] as any[]),
     columns: columns,
     filterFns: {
       fuzzy: fuzzyFilter
@@ -224,7 +224,7 @@ const CategoryListTable = ({ tableData }: { tableData?: any[] }) => {
 
         <div className='overflow-x-auto'>
           <table className={tableStyles.table}>
-            {table.getFilteredRowModel().rows.length === 0 ? (
+            {table.getFilteredRowModel().rows?.length === 0 ? (
               <tbody>
                 <tr>
                   <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>

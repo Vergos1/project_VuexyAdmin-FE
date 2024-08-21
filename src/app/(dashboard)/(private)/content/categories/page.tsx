@@ -1,7 +1,7 @@
 'use client'
 
 import CustomTabList from '@/@core/components/mui/TabList'
-import ContentTabs from '@/views/content/categories/Tabs'
+import ContentTabs from '@/views/content/Tabs'
 import CategoryListTable from '@/views/content/categories/CategoryListTable'
 import CategoryList from '@/views/content/categories'
 
