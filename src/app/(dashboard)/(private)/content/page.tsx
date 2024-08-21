@@ -4,12 +4,12 @@
 import CustomTabList from '@/@core/components/mui/TabList'
 
 import { TabContext, TabPanel } from '@mui/lab'
-import { SyntheticEvent, useState } from 'react'
+import { ReactElement, SyntheticEvent, useState } from 'react'
 import { Grid, Tab } from '@mui/material'
 import CategoriesList from './categories/page'
 import Prompt from '@/views/content/prompt'
 
-const tabContentList = {
+const tabContentList: { [key: string]: ReactElement } = {
   categories: <CategoriesList />,
   pushNotificationsTemplates: <Prompt />
 }
