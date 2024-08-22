@@ -1,7 +1,12 @@
-import React from 'react'
+import ContentTabs from '@/views/content/Tabs'
 
 const Page = () => {
-  return <div>Prompt for AI</div>
+  return (
+    <>
+      <ContentTabs />
+      <div>Prompt for AI</div>
+    </>
+  )
 }
 
 export default Page
