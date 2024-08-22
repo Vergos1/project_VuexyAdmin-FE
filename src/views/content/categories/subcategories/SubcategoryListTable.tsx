@@ -1,29 +1,29 @@
-'use client';
+'use client'
 
 // React Imports
-import { useState, useMemo, ReactNode } from 'react';
+import { useState, useMemo, ReactNode } from 'react'
 
 // Next Imports
 // import Link from 'next/link'
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation'
 
 // MUI Imports
 
-import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
-import Button, { ButtonProps } from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Chip from '@mui/material/Chip';
-import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
-import { styled } from '@mui/material/styles';
-import TablePagination from '@mui/material/TablePagination';
-import type { TextFieldProps } from '@mui/material/TextField';
-import MenuItem from '@mui/material/MenuItem';
+import Card from '@mui/material/Card'
+import CardHeader from '@mui/material/CardHeader'
+import Button, { ButtonProps } from '@mui/material/Button'
+import Typography from '@mui/material/Typography'
+import Chip from '@mui/material/Chip'
+import Checkbox from '@mui/material/Checkbox'
+import IconButton from '@mui/material/IconButton'
+import { styled } from '@mui/material/styles'
+import TablePagination from '@mui/material/TablePagination'
+import type { TextFieldProps } from '@mui/material/TextField'
+import MenuItem from '@mui/material/MenuItem'
 
 // Third-party Imports
-import classnames from 'classnames';
-import { rankItem } from '@tanstack/match-sorter-utils';
+import classnames from 'classnames'
+import { rankItem } from '@tanstack/match-sorter-utils'
 import {
   createColumnHelper,
   flexRender,
@@ -34,75 +34,75 @@ import {
   getFacetedUniqueValues,
   getFacetedMinMaxValues,
   getPaginationRowModel,
-  getSortedRowModel,
-} from '@tanstack/react-table';
-import type { ColumnDef, FilterFn } from '@tanstack/react-table';
-import type { RankingInfo } from '@tanstack/match-sorter-utils';
+  getSortedRowModel
+} from '@tanstack/react-table'
+import type { ColumnDef, FilterFn } from '@tanstack/react-table'
+import type { RankingInfo } from '@tanstack/match-sorter-utils'
 
 // Type Imports
-import type { ThemeColor } from '@core/types';
+import type { ThemeColor } from '@core/types'
 
 // Component Imports
 
-import OptionMenu from '@core/components/option-menu';
-import TablePaginationComponent from '@/components/TablePaginationComponent';
-import CustomTextField from '@core/components/mui/TextField';
-import CustomAvatar from '@core/components/mui/Avatar';
+import OptionMenu from '@core/components/option-menu'
+import TablePaginationComponent from '@/components/TablePaginationComponent'
+import CustomTextField from '@core/components/mui/TextField'
+import CustomAvatar from '@core/components/mui/Avatar'
 
 // Util Imports
-import { getInitials } from '@/utils/getInitials';
+import { getInitials } from '@/utils/getInitials'
 
 // Style Imports
-import tableStyles from '@core/styles/table.module.css';
-import OpenDialogOnElementClick from '@/components/dialogs/OpenDialogOnElementClick';
-import AddNewCategory from '@/components/dialogs/add-edit-category';
-import ActionModal from '@/components/dialogs/action-modal';
+import tableStyles from '@core/styles/table.module.css'
+import OpenDialogOnElementClick from '@/components/dialogs/OpenDialogOnElementClick'
+import AddNewCategory from '@/components/dialogs/add-edit-category'
+import ActionModal from '@/components/dialogs/action-modal'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
-    fuzzy: FilterFn<unknown>;
+    fuzzy: FilterFn<unknown>
   }
   interface FilterMeta {
-    itemRank: RankingInfo;
+    itemRank: RankingInfo
   }
 }
 
 type UsersTypeWithAction = any & {
-  action?: string;
-};
+  action?: string
+}
 
 type UserRoleType = {
-  [key: string]: { icon: string };
-};
+  [key: string]: { icon: string }
+}
 
 type UserStatusType = {
-  [key: string]: ThemeColor;
-};
+  [key: string]: ThemeColor
+}
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   // Rank the item
-  const itemRank = rankItem(row.getValue(columnId), value);
+  const itemRank = rankItem(row.getValue(columnId), value)
 
   // Store the itemRank info
   addMeta({
-    itemRank,
-  });
+    itemRank
+  })
 
   // Return if the item should be filtered in/out
-  return itemRank.passed;
-};
+  return itemRank.passed
+}
 
 // Column Definitions
-const columnHelper = createColumnHelper<UsersTypeWithAction>();
+const columnHelper = createColumnHelper<UsersTypeWithAction>()
 
 const SubcategoryListTable = ({ title, tableData }: { title: string; tableData?: any[] }) => {
   //Init
-  const router = useRouter();
+  const router = useRouter()
 
   // States
-  const [rowSelection, setRowSelection] = useState({});
-  const [data, setData] = useState(...[tableData]);
-  const [globalFilter, setGlobalFilter] = useState('');
+  const [rowSelection, setRowSelection] = useState({})
+  const [data, setData] = useState(...[tableData])
+  const [globalFilter, setGlobalFilter] = useState('')
 
   const columns = useMemo<ColumnDef<UsersTypeWithAction, any>[]>(
     () => [
@@ -112,12 +112,12 @@ const SubcategoryListTable = ({ title, tableData }: { title: string; tableData?:
           <div className='flex items-center gap-4'>
             <Typography variant='body1'>{row.original.name}</Typography>
           </div>
-        ),
+        )
       }),
       columnHelper.accessor('action', {
         header: '',
         cell: ({}) => (
-          <div className='flex items-center justify-end gap-2 pr-[30px]'>
+          <div onClick={e => e.stopPropagation()} className='flex items-center justify-end gap-2 pr-[30px]'>
             <OpenDialogOnElementClick
               element={IconButton}
               elementProps={buttonProps(<i className='tabler-edit' />)}
@@ -126,7 +126,7 @@ const SubcategoryListTable = ({ title, tableData }: { title: string; tableData?:
                 title: 'Edit Subcategory',
                 inputLabel: 'Subcategory name',
                 placeholder: 'Edit subcategory',
-                onSubmit: (value: string) => console.log(value),
+                onSubmit: (value: string) => console.log(value)
               }}
             />
             <OpenDialogOnElementClick
@@ -135,28 +135,28 @@ const SubcategoryListTable = ({ title, tableData }: { title: string; tableData?:
               dialog={ActionModal}
               dialogProps={{
                 title: 'Delete an item?',
-                text: 'Are you sure you want to delete this item? You can\'t undo this action.',
+                text: "Are you sure you want to delete this item? You can't undo this action.",
                 onSubmit: (value: string) => console.log(value),
-                actionText: 'Delete',
+                actionText: 'Delete'
               }}
             />
           </div>
-        ),
-      }),
+        )
+      })
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [data],
-  );
+    [data]
+  )
 
   const table = useReactTable({
     data: data as any[],
     columns: columns,
     filterFns: {
-      fuzzy: fuzzyFilter,
+      fuzzy: fuzzyFilter
     },
     state: {
       rowSelection,
-      globalFilter,
+      globalFilter
     },
     initialState: {},
     enableRowSelection: true, //enable row selection for all rows
@@ -170,24 +170,24 @@ const SubcategoryListTable = ({ title, tableData }: { title: string; tableData?:
     getPaginationRowModel: getPaginationRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
-    getFacetedMinMaxValues: getFacetedMinMaxValues(),
-  });
+    getFacetedMinMaxValues: getFacetedMinMaxValues()
+  })
 
   const redirectToQuestions = (id: string) => {
-    router.push(`/content/categories/subcategories/questions`);
-  };
+    router.push(`/content/categories/subcategories/questions`)
+  }
 
   const buttonProps = (
     children: string | ReactNode,
     color?: ThemeColor,
     variant?: ButtonProps['variant'],
-    startIcon?: ReactNode,
+    startIcon?: ReactNode
   ): ButtonProps => ({
     children,
     color,
     variant,
-    startIcon,
-  });
+    startIcon
+  })
 
   return (
     <>
@@ -198,18 +198,13 @@ const SubcategoryListTable = ({ title, tableData }: { title: string; tableData?:
           <div className='p-6'>
             <OpenDialogOnElementClick
               element={Button}
-              elementProps={buttonProps(
-                'Add Subcategory',
-                'primary',
-                'contained',
-                <i className='tabler-plus' />,
-              )}
+              elementProps={buttonProps('Add Subcategory', 'primary', 'contained', <i className='tabler-plus' />)}
               dialog={AddNewCategory}
               dialogProps={{
                 title: 'Add New Subcategory',
                 inputLabel: 'Subcategory name',
                 placeholder: 'Name',
-                onSubmit: (value: string) => console.log(value),
+                onSubmit: (value: string) => console.log(value)
               }}
             />
           </div>
@@ -229,24 +224,25 @@ const SubcategoryListTable = ({ title, tableData }: { title: string; tableData?:
                 {table
                   .getRowModel()
                   .rows.slice(0, table.getState().pagination.pageSize)
-                  .map((row) => {
+                  .map(row => {
                     return (
                       <tr
                         onClick={() => redirectToQuestions(row.original.id)}
                         key={row.id}
                         className={
                           (classnames({
-                            selected: row.getIsSelected(),
+                            selected: row.getIsSelected()
                           }),
                           'hover:bg-gray-100')
-                        }>
-                        {row.getVisibleCells().map((cell) => (
-                          <td className='hover' key={cell.id}>
+                        }
+                      >
+                        {row.getVisibleCells().map(cell => (
+                          <td className='hover cursor-pointer' key={cell.id}>
                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                           </td>
                         ))}
                       </tr>
-                    );
+                    )
                   })}
               </tbody>
             )}
@@ -258,12 +254,12 @@ const SubcategoryListTable = ({ title, tableData }: { title: string; tableData?:
           rowsPerPage={table.getState().pagination.pageSize}
           page={table.getState().pagination.pageIndex}
           onPageChange={(_, page) => {
-            table.setPageIndex(page);
+            table.setPageIndex(page)
           }}
         />
       </Card>
     </>
-  );
-};
+  )
+}
 
-export default SubcategoryListTable;
+export default SubcategoryListTable

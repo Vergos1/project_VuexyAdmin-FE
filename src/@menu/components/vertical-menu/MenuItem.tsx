@@ -40,6 +40,7 @@ export type MenuItemProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'prefi
     prefix?: ReactNode
     suffix?: ReactNode
     disabled?: boolean
+    activeUrlPrefix?: string
     target?: string
     rel?: string
     component?: string | ReactElement
@@ -63,6 +64,7 @@ const MenuItem: ForwardRefRenderFunction<HTMLLIElement, MenuItemProps> = (props,
     disabled = false,
     exactMatch = true,
     activeUrl,
+    activeUrlPrefix,
     component,
     onActiveChange,
     rootStyles,
@@ -110,7 +112,11 @@ const MenuItem: ForwardRefRenderFunction<HTMLLIElement, MenuItemProps> = (props,
 
     if (href) {
       // Check if the current url matches any of the children urls
-      if (exactMatch ? pathname === href : activeUrl && pathname.includes(activeUrl)) {
+      if (
+        exactMatch
+          ? pathname === href
+          : (activeUrlPrefix && pathname.startsWith(activeUrlPrefix)) || (activeUrl && pathname.includes(activeUrl))
+      ) {
         setActive(true)
       } else {
         setActive(false)

@@ -250,7 +250,7 @@ const CategoryListTable = ({ tableData }: { tableData?: any[] }) => {
                         }
                       >
                         {row.getVisibleCells().map(cell => (
-                          <td className='hover' key={cell.id}>
+                          <td className='hover cursor-pointer' key={cell.id}>
                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                           </td>
                         ))}

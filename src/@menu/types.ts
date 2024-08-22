@@ -16,14 +16,17 @@ export type MenuItemExactMatchUrlProps =
   | {
       exactMatch: true
       activeUrl?: never
+      activeUrlPrefix?: never
     }
   | {
       exactMatch: false
       activeUrl: string
+      activeUrlPrefix?: string
     }
   | {
       exactMatch?: never
       activeUrl?: never
+      activeUrlPrefix?: never
     }
 
 // Menu Item Elements for styling

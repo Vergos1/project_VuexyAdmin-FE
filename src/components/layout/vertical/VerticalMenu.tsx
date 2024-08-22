@@ -78,12 +78,18 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
           <MenuItem href='/user/list' icon={<i className='tabler-user' />}>
             User management
           </MenuItem>
-          <MenuItem href='/content/categories' icon={<i className='tabler-layout' />}>
+          <MenuItem
+            href='/content/categories'
+            activeUrl='/content/categories'
+            exactMatch={false}
+            activeUrlPrefix='/content'
+            icon={<i className='tabler-layout' />}
+          >
             Content management
           </MenuItem>
-          <MenuItem href='/about' icon={<i className='tabler-mail' />}>
-            Push/Email notification
-          </MenuItem>
+          {/* <MenuItem href='/about' icon={<i className='tabler-mail' />}>
+                Push/Email notification
+          </MenuItem> */}
           <MenuItem href='/about' icon={<i className='tabler-file-text' />}>
             User content moderation
           </MenuItem>

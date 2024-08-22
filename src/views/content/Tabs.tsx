@@ -32,7 +32,7 @@ const ContentTabs = () => {
   return (
     <>
       <TabContext value={activeTab?.value ?? 'categories'}>
-        <CustomTabList onChange={(event, value) => router.push(value)} variant='scrollable' pill='true'>
+        <CustomTabList onChange={(_, value) => router.push(value)} variant='scrollable' pill='true'>
           {tabs.map(tab => (
             <Tab
               key={tab.value}

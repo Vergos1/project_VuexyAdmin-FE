@@ -9,6 +9,7 @@ import { Breadcrumbs, Link, Tab, Tabs, Typography } from '@mui/material'
 import CustomTabList from '@/@core/components/mui/TabList'
 import CategoryListTable from '@/views/content/categories/CategoryListTable'
 import QuestionListTable from '@/views/content/categories/subcategories/questions/QuestionListTable'
+import ContentTabs from '@/views/content/Tabs'
 
 const mockData = {
   id: '123e4567-e89b-12d3-a456-426614174000',
@@ -31,6 +32,7 @@ const mockData = {
 export default function Page() {
   return (
     <div className='flex flex-col gap-6'>
+      <ContentTabs />
       <Breadcrumbs aria-label='breadcrumb'>
         <Link className='hover:text-primary' href='/content/categories'>
           Categories
