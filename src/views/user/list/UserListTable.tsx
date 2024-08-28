@@ -147,9 +147,6 @@ const userStatusObj: UserStatusType = {
 const columnHelper = createColumnHelper<UsersTypeWithAction>()
 
 const UserListTable = ({ tableData }: { tableData?: any[] }) => {
-  //! DELETE
-  //console.log('user data:', tableData)
-
   // States
   const [addUserOpen, setAddUserOpen] = useState(false)
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null)
