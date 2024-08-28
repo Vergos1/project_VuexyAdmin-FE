@@ -27,8 +27,7 @@ const mockData = [
     firstName: 'lali',
     lastName: 'lulu',
     email: 'ivashchyshyn.m@iwis.io',
-    avatar:
-      'https://firebasestorage.googleapis.com/v0/b/encore-dd4d9.appspot.com/o/avatars%2F1723789385701_DSC03727.JPG?alt=media&token=19018720-9f7c-484c-bd8d-6c936accde37',
+    avatar: null,
     role: 'user',
     status: 'active'
   },
@@ -37,8 +36,7 @@ const mockData = [
     firstName: 'john',
     lastName: 'doe',
     email: 'ivashchyshyn.m@iwis.io',
-    avatar:
-      'https://firebasestorage.googleapis.com/v0/b/encore-dd4d9.appspot.com/o/avatars%2F1723760278366_image?alt=media&token=cf408cc0-44a3-4881-b8c8-5c76fa20615b',
+    avatar: null,
     role: 'user',
     status: 'active'
   },
