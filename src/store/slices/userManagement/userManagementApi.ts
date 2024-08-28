@@ -20,7 +20,7 @@ export const userManagementApi = createApi({
         method: 'GET'
       })
     }),
-    blockUserById: builder.mutation({
+    changeUserStatusById: builder.mutation({
       query: (id: string) => ({
         url: `users/status/${id}`,
         method: 'POST'
@@ -30,4 +30,4 @@ export const userManagementApi = createApi({
   })
 })
 
-export const { useGetUsersQuery, useLazyGetUserInfoByIdQuery, useBlockUserByIdMutation } = userManagementApi
+export const { useGetUsersQuery, useLazyGetUserInfoByIdQuery, useChangeUserStatusByIdMutation } = userManagementApi

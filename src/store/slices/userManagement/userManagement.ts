@@ -25,7 +25,7 @@ const userManagementSlice = createSlice({
       console.log('payload', payload)
       state.user = payload
     })
-    builder.addMatcher(userManagementApi.endpoints.blockUserById.matchFulfilled, (state, { payload }) => {
+    builder.addMatcher(userManagementApi.endpoints.changeUserStatusById.matchFulfilled, (state, { payload }) => {
       console.log('payload', payload)
     })
 

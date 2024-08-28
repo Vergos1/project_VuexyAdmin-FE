@@ -56,7 +56,10 @@ import { getInitials } from '@/utils/getInitials'
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
 import { getFullName } from '@/utils/getFullName'
-import { useBlockUserByIdMutation, useLazyGetUserInfoByIdQuery } from '@/store/slices/userManagement/userManagementApi'
+import {
+  useChangeUserStatusByIdMutation,
+  useLazyGetUserInfoByIdQuery
+} from '@/store/slices/userManagement/userManagementApi'
 import { getAvatar } from '@/utils/getAvatar'
 
 declare module '@tanstack/table-core' {
@@ -160,11 +163,11 @@ const UserListTable = ({ tableData }: { tableData?: any[] }) => {
   }, [tableData])
 
   const [getUserInfoById, { data: userInfo, isLoading: isUserInfoLoading }] = useLazyGetUserInfoByIdQuery()
-  const [blockUserById, { isLoading: isBlockLoading, error }] = useBlockUserByIdMutation()
+  const [changeUserStatusById, { isLoading: isBlockLoading, error }] = useChangeUserStatusByIdMutation()
 
-  const handleBlockUser = async (id: string) => {
+  const handleChangeUserStatus = async (id: string) => {
     try {
-      await blockUserById(id).unwrap()
+      await changeUserStatusById(id).unwrap()
     } catch (error) {
       console.error('Failed to block user:', error)
     }
@@ -269,10 +272,12 @@ const UserListTable = ({ tableData }: { tableData?: any[] }) => {
                   onClick: () => handleUserDetailsClick(row.original.id) //?? Передаємо ID користувача
                 },
                 {
-                  text: 'Block user',
-                  icon: 'tabler-circle-x',
-                  menuItemProps: { className: 'flex items-center gap-2 text-error' },
-                  onClick: () => handleBlockUser(row.original.id)
+                  text: row.original.status === 'blocked' ? 'Unblock user' : 'Block user',
+                  icon: row.original.status === 'blocked' ? 'tabler-circle-check' : 'tabler-circle-x',
+                  menuItemProps: {
+                    className: `flex items-center gap-2 ${row.original.status === 'blocked' ? 'text-success' : 'text-error'}`
+                  },
+                  onClick: () => handleChangeUserStatus(row.original.id)
                 }
               ]}
             />
