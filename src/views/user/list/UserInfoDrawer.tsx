@@ -100,20 +100,6 @@ const UserInfoDrawer = ({ isLoading, open, handleClose, userData, setData }: Pro
     }
   })
 
-  const user: any = {
-    fullName: 'John Doe',
-    id: '235689054',
-    email: 'john.doe@example.com',
-    dob: '08/04/1999',
-    status: 'Active',
-    plan: 'Moments Deluxe (Monthly)',
-    voiceRecording: '8 / 300 minutes',
-    inspirationQuestions: 'XX / 50',
-    categories: ['Animals', 'Family', 'Health'],
-    trustedAccount: { fullName: 'Nick Doe', email: 'nick.doe@example.com', relationship: 'Brother' },
-    dependentAccount: { participants: 'Ann Doe' }
-  }
-
   return (
     <Dialog
       fullWidth
@@ -121,116 +107,117 @@ const UserInfoDrawer = ({ isLoading, open, handleClose, userData, setData }: Pro
       onClose={handleClose}
       maxWidth='md'
       scroll='body'
-      sx={{ '& .MuiDialog-paper': { overflow: 'visible', position: 'relative' } }}
+      sx={{ '& .MuiDialog-paper': { overflow: 'visible' } }}
     >
-      {isLoading ? (
-        <ComponentPreloader />
-      ) : (
-        <>
-          <div className='flex items-center justify-between plb-7 pli-6'>
-            <DialogTitle variant='h4' className='min-w-[100%] text-center p-0'>
-              User Information
-            </DialogTitle>
-            <DialogCloseButton onClick={() => handleClose()} disableRipple>
-              <i className='tabler-x' />
-            </DialogCloseButton>
-          </div>
-          <div className='flex items-center justify-center'>
-            {getAvatar({
-              avatar: '',
-              firstName: userData?.firstName || '',
-              lastName: userData?.lastName || '',
-              size: 60
-            })}
-          </div>
-          <DialogContent className='flex items-center justify-center plb-6'>
-            <Paper elevation={3} style={{ padding: '16px' }} className='br-[6px]'>
-              <Grid container className='plb-6 gap-y-6' maxWidth='700px' spacing={2}>
-                <Grid item xs={12} md={6}>
-                  <Typography variant='subtitle1' className='mb-3'>
-                    About
-                  </Typography>
-                  <Typography className='flex items-center mb-3'>
-                    <i className='tabler-user mr-[8px]' /> <strong className='mr-[12px]'>Full Name:</strong>{' '}
-                    {(userData && getFullName(userData.firstName, userData.lastName)) ?? 'N/A'}
-                  </Typography>
-                  <Typography className='flex items-center mb-3'>
-                    <i className='tabler-user-exclamation mr-[8px]' /> <strong className='mr-[12px]'>User ID:</strong>{' '}
-                    {userData?.id ?? 'N/A'}
-                  </Typography>
-                  <Typography className='flex items-center mb-3'>
-                    <i className='tabler-mail mr-[8px]' /> <strong className='mr-[12px]'>Email:</strong>{' '}
-                    {userData?.email ?? 'N/A'}
-                  </Typography>
-                  <Typography className='flex items-center mb-3'>
-                    <i className='tabler-calendar mr-[8px]' /> <strong className='mr-[12px]'>Date of Birth:</strong>{' '}
-                    {(userData?.birthDate && getFormattedDate(userData?.birthDate)) ?? 'N/A'}
-                  </Typography>
-                  <Typography className='flex items-center capitalize'>
-                    <i className='tabler-check mr-[8px]' /> <strong className='mr-[12px]'>Status:</strong>{' '}
-                    {userData?.status ?? 'N/A'}
-                  </Typography>
-                </Grid>
-
-                <Grid item xs={12} md={6}>
-                  <Typography variant='subtitle1' className='mb-3'>
-                    Tariff Plan
-                  </Typography>
-                  <Typography className='flex items-center mb-3'>
-                    <i className='tabler-businessplan mr-[8px]' /> <strong className='mr-[12px]'>Plan:</strong>{' '}
-                    {userData?.plan ?? 'N/A'}
-                  </Typography>
-                  <Typography className='flex items-center mb-3'>
-                    <i className='tabler-microphone mr-[8px]' /> <strong className='mr-[12px]'>Voice Recording:</strong>{' '}
-                    {userData?.voiceRecordsLength ?? 'N/A'} / 300 minutes
-                  </Typography>
-                  <Typography className='flex items-center mb-3'>
-                    <i className='tabler-question-mark mr-[8px]' />{' '}
-                    <strong className='mr-[12px]'>Inspiration Questions:</strong>
-                    {userData?.questionsAmount ?? 'N/A'}/50
-                  </Typography>
-                  <Typography className='flex items-center'>
-                    <i className='tabler-question-mark mr-[8px]' /> <strong className='mr-[12px]'>Categories:</strong>{' '}
-                    {userData && userData.categories.length > 0
-                      ? userData.categories.map((category, index) => <span key={index}>{category},</span>)
-                      : 'N/A'}
-                  </Typography>
-                </Grid>
-
-                <Grid item xs={12} md={6}>
-                  <Typography variant='subtitle1' className='mb-3'>
-                    Trusted Account
-                  </Typography>
-                  <Typography className='flex items-center mb-3'>
-                    <i className='tabler-user mr-[8px]' /> <strong className='mr-[12px]'>Full Name:</strong>{' '}
-                    {(userData?.trustedAccount &&
-                      getFullName(userData.trustedAccount?.firstName, userData.trustedAccount?.lastName)) ??
-                      'N/A'}
-                  </Typography>
-                  <Typography className='flex items-center mb-3'>
-                    <i className='tabler-mail mr-[8px]' /> <strong className='mr-[12px]'>Email:</strong>{' '}
-                    {userData?.trustedAccount?.email ?? 'N/A'}
-                  </Typography>
-                  <Typography className='flex items-center'>
-                    <i className='tabler-repeat mr-[8px]' /> <strong className='mr-[12px]'>Relationship:</strong>{' '}
-                    {userData?.trustedAccount?.relationship ?? 'N/A'}
-                  </Typography>
-                </Grid>
-
-                <Grid item xs={12} gap={2} md={6}>
-                  <Typography variant='subtitle1' className='mb-3'>
-                    Dependent (Child) Account
-                  </Typography>
-                  <Typography className='flex items-center'>
-                    <i className='tabler-mood-boy mr-[8px]' /> <strong className='mr-[12px]'>Participants:</strong>{' '}
-                    {userData?.dependentAccount ?? 'N/A'}
-                  </Typography>
-                </Grid>
+      <div className='flex items-center justify-between plb-7 pli-6 relative'>
+        {!isLoading && (
+          <DialogTitle variant='h4' className='min-w-[100%] text-center p-0'>
+            User Information
+          </DialogTitle>
+        )}
+        <DialogCloseButton onClick={() => handleClose()} disableRipple>
+          <i className='tabler-x' />
+        </DialogCloseButton>
+      </div>
+      <div className='flex items-center justify-center relative'>
+        {!isLoading &&
+          getAvatar({
+            avatar: '',
+            firstName: userData?.firstName || '',
+            lastName: userData?.lastName || '',
+            size: 60
+          })}
+      </div>
+      <DialogContent className='flex items-center min-h-[70vh] justify-center plb-6 relative'>
+        {isLoading ? (
+          <ComponentPreloader />
+        ) : (
+          <Paper elevation={3} style={{ padding: '16px' }} className='br-[6px]'>
+            <Grid container className='plb-6 gap-y-6' maxWidth='700px' spacing={2}>
+              <Grid item xs={12} md={6}>
+                <Typography variant='subtitle1' className='mb-3'>
+                  About
+                </Typography>
+                <Typography className='flex items-center mb-3'>
+                  <i className='tabler-user mr-[8px]' /> <strong className='mr-[12px]'>Full Name:</strong>{' '}
+                  {(userData && getFullName(userData.firstName, userData.lastName)) ?? 'N/A'}
+                </Typography>
+                <Typography className='flex items-center mb-3'>
+                  <i className='tabler-user-exclamation mr-[8px]' /> <strong className='mr-[12px]'>User ID:</strong>{' '}
+                  {userData?.id ?? 'N/A'}
+                </Typography>
+                <Typography className='flex items-center mb-3'>
+                  <i className='tabler-mail mr-[8px]' /> <strong className='mr-[12px]'>Email:</strong>{' '}
+                  {userData?.email ?? 'N/A'}
+                </Typography>
+                <Typography className='flex items-center mb-3'>
+                  <i className='tabler-calendar mr-[8px]' /> <strong className='mr-[12px]'>Date of Birth:</strong>{' '}
+                  {(userData?.birthDate && getFormattedDate(userData?.birthDate)) ?? 'N/A'}
+                </Typography>
+                <Typography className='flex items-center capitalize'>
+                  <i className='tabler-check mr-[8px]' /> <strong className='mr-[12px]'>Status:</strong>{' '}
+                  {userData?.status ?? 'N/A'}
+                </Typography>
               </Grid>
-            </Paper>
-          </DialogContent>
-        </>
-      )}
+
+              <Grid item xs={12} md={6}>
+                <Typography variant='subtitle1' className='mb-3'>
+                  Tariff Plan
+                </Typography>
+                <Typography className='flex items-center mb-3'>
+                  <i className='tabler-businessplan mr-[8px]' /> <strong className='mr-[12px]'>Plan:</strong>{' '}
+                  {userData?.plan ?? 'N/A'}
+                </Typography>
+                <Typography className='flex items-center mb-3'>
+                  <i className='tabler-microphone mr-[8px]' /> <strong className='mr-[12px]'>Voice Recording:</strong>{' '}
+                  {userData?.voiceRecordsLength ?? 'N/A'} / 300 minutes
+                </Typography>
+                <Typography className='flex items-center mb-3'>
+                  <i className='tabler-question-mark mr-[8px]' />{' '}
+                  <strong className='mr-[12px]'>Inspiration Questions:</strong>
+                  {userData?.questionsAmount ?? 'N/A'}/50
+                </Typography>
+                <Typography className='flex items-center'>
+                  <i className='tabler-question-mark mr-[8px]' /> <strong className='mr-[12px]'>Categories:</strong>{' '}
+                  {userData && userData.categories.length > 0
+                    ? userData.categories.map((category, index) => <span key={index}>{category},</span>)
+                    : 'N/A'}
+                </Typography>
+              </Grid>
+
+              <Grid item xs={12} md={6}>
+                <Typography variant='subtitle1' className='mb-3'>
+                  Trusted Account
+                </Typography>
+                <Typography className='flex items-center mb-3'>
+                  <i className='tabler-user mr-[8px]' /> <strong className='mr-[12px]'>Full Name:</strong>{' '}
+                  {(userData?.trustedAccount &&
+                    getFullName(userData.trustedAccount?.firstName, userData.trustedAccount?.lastName)) ??
+                    'N/A'}
+                </Typography>
+                <Typography className='flex items-center mb-3'>
+                  <i className='tabler-mail mr-[8px]' /> <strong className='mr-[12px]'>Email:</strong>{' '}
+                  {userData?.trustedAccount?.email ?? 'N/A'}
+                </Typography>
+                <Typography className='flex items-center'>
+                  <i className='tabler-repeat mr-[8px]' /> <strong className='mr-[12px]'>Relationship:</strong>{' '}
+                  {userData?.trustedAccount?.relationship ?? 'N/A'}
+                </Typography>
+              </Grid>
+
+              <Grid item xs={12} gap={2} md={6}>
+                <Typography variant='subtitle1' className='mb-3'>
+                  Dependent (Child) Account
+                </Typography>
+                <Typography className='flex items-center'>
+                  <i className='tabler-mood-boy mr-[8px]' /> <strong className='mr-[12px]'>Participants:</strong>{' '}
+                  {userData?.dependentAccount ?? 'N/A'}
+                </Typography>
+              </Grid>
+            </Grid>
+          </Paper>
+        )}
+      </DialogContent>
     </Dialog>
   )
 }

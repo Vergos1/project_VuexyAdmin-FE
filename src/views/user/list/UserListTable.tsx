@@ -160,7 +160,6 @@ const UserListTable = ({ tableData }: { tableData?: any[] }) => {
   const handleUserDetailsClick = (id: string) => {
     setSelectedUserId(id)
     setAddUserOpen(true)
-    console.log('handleUserDetailsClick', id)
     getUserInfoById(id) //? Викликаємо запит для отримання даних користувача
   }
 
