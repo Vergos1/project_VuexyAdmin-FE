@@ -57,6 +57,7 @@ import { getInitials } from '@/utils/getInitials'
 import tableStyles from '@core/styles/table.module.css'
 import { getFullName } from '@/utils/getFullName'
 import { useLazyGetUserInfoByIdQuery } from '@/store/slices/userManagement/userManagementApi'
+import { getAvatar } from '@/utils/getAvatar'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -300,18 +301,6 @@ const UserListTable = ({ tableData }: { tableData?: any[] }) => {
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getFacetedMinMaxValues: getFacetedMinMaxValues()
   })
-
-  const getAvatar = (params: Pick<any, 'avatar' | 'firstName' | 'lastName'>) => {
-    const { avatar, firstName, lastName } = params
-
-    if (avatar) {
-      return <CustomAvatar src={avatar} size={34} />
-    } else {
-      return <CustomAvatar size={34}>{getInitials(`${firstName} ${lastName}`)}</CustomAvatar>
-
-      // return <CustomAvatar size={34}>{getInitials(fullName as string)}</CustomAvatar>
-    }
-  }
 
   const blockUser = async (id: number) => {
     console.log('Block user', id)

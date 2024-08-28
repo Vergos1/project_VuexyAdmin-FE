@@ -46,6 +46,7 @@ import { getInitials } from '@/utils/getInitials'
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
 import { getFullName } from '@/utils/getFullName'
+import { getAvatar } from '@/utils/getAvatar'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -144,16 +145,6 @@ const PostListTable = ({ tableData, tableType = 'new' }: { tableData?: any[]; ta
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [tableData]
   )
-
-  const getAvatar = (params: Pick<any, 'avatar' | 'firstName' | 'lastName'>) => {
-    const { avatar, firstName, lastName } = params
-
-    if (avatar) {
-      return <CustomAvatar src={avatar} size={34} />
-    } else {
-      return <CustomAvatar size={34}>{getInitials(`${firstName} ${lastName}`)}</CustomAvatar>
-    }
-  }
 
   const table = useReactTable({
     data: tableData || ([] as any[]),

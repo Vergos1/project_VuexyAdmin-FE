@@ -21,6 +21,7 @@ import CustomAvatar from '@/@core/components/mui/Avatar'
 import { ComponentPreloader } from '@/components/Preloader'
 import { getFullName } from '@/utils/getFullName'
 import { getFormattedDate } from '@/utils/getFormattedDate'
+import { getAvatar } from '@/utils/getAvatar'
 
 // Types Imports
 // import type { UsersType } from '@/types/apps/userTypes'
@@ -74,18 +75,6 @@ const initialData = {
   company: '',
   country: '',
   contact: ''
-}
-
-const getAvatar = (params: Pick<any, 'avatar' | 'firstName' | 'lastName'>) => {
-  const { avatar, firstName, lastName } = params
-
-  if (avatar) {
-    return <CustomAvatar src={avatar} size={60} />
-  } else {
-    return <CustomAvatar size={60}>{getInitials(`${firstName} ${lastName}`)}</CustomAvatar>
-
-    // return <CustomAvatar size={34}>{getInitials(fullName as string)}</CustomAvatar>
-  }
 }
 
 const UserInfoDrawer = ({ isLoading, open, handleClose, userData, setData }: Props & { isLoading: boolean }) => {
@@ -149,30 +138,31 @@ const UserInfoDrawer = ({ isLoading, open, handleClose, userData, setData }: Pro
           <div className='flex items-center justify-center'>
             {getAvatar({
               avatar: '',
-              firstName: userData?.firstName,
-              lastName: userData?.lastName
+              firstName: userData?.firstName || '',
+              lastName: userData?.lastName || '',
+              size: 60
             })}
           </div>
           <DialogContent className='flex items-center justify-center plb-6'>
             <Paper elevation={3} style={{ padding: '16px' }} className='br-[6px]'>
               <Grid container className='plb-6 gap-y-6' maxWidth='700px' spacing={2}>
                 <Grid item xs={12} md={6}>
-                  <Typography variant='subtitle1' className='mb-2'>
+                  <Typography variant='subtitle1' className='mb-3'>
                     About
                   </Typography>
-                  <Typography className='flex items-center mb-2'>
+                  <Typography className='flex items-center mb-3'>
                     <i className='tabler-user mr-[8px]' /> <strong className='mr-[12px]'>Full Name:</strong>{' '}
                     {(userData && getFullName(userData.firstName, userData.lastName)) ?? 'N/A'}
                   </Typography>
-                  <Typography className='flex items-center mb-2'>
+                  <Typography className='flex items-center mb-3'>
                     <i className='tabler-user-exclamation mr-[8px]' /> <strong className='mr-[12px]'>User ID:</strong>{' '}
                     {userData?.id ?? 'N/A'}
                   </Typography>
-                  <Typography className='flex items-center mb-2'>
+                  <Typography className='flex items-center mb-3'>
                     <i className='tabler-mail mr-[8px]' /> <strong className='mr-[12px]'>Email:</strong>{' '}
                     {userData?.email ?? 'N/A'}
                   </Typography>
-                  <Typography className='flex items-center mb-2'>
+                  <Typography className='flex items-center mb-3'>
                     <i className='tabler-calendar mr-[8px]' /> <strong className='mr-[12px]'>Date of Birth:</strong>{' '}
                     {(userData?.birthDate && getFormattedDate(userData?.birthDate)) ?? 'N/A'}
                   </Typography>
@@ -183,18 +173,18 @@ const UserInfoDrawer = ({ isLoading, open, handleClose, userData, setData }: Pro
                 </Grid>
 
                 <Grid item xs={12} md={6}>
-                  <Typography variant='subtitle1' className='mb-2'>
+                  <Typography variant='subtitle1' className='mb-3'>
                     Tariff Plan
                   </Typography>
-                  <Typography className='flex items-center mb-2'>
+                  <Typography className='flex items-center mb-3'>
                     <i className='tabler-businessplan mr-[8px]' /> <strong className='mr-[12px]'>Plan:</strong>{' '}
                     {userData?.plan ?? 'N/A'}
                   </Typography>
-                  <Typography className='flex items-center mb-2'>
+                  <Typography className='flex items-center mb-3'>
                     <i className='tabler-microphone mr-[8px]' /> <strong className='mr-[12px]'>Voice Recording:</strong>{' '}
                     {userData?.voiceRecordsLength ?? 'N/A'} / 300 minutes
                   </Typography>
-                  <Typography className='flex items-center mb-2'>
+                  <Typography className='flex items-center mb-3'>
                     <i className='tabler-question-mark mr-[8px]' />{' '}
                     <strong className='mr-[12px]'>Inspiration Questions:</strong>
                     {userData?.questionsAmount ?? 'N/A'}/50
@@ -208,16 +198,16 @@ const UserInfoDrawer = ({ isLoading, open, handleClose, userData, setData }: Pro
                 </Grid>
 
                 <Grid item xs={12} md={6}>
-                  <Typography variant='subtitle1' className='mb-2'>
+                  <Typography variant='subtitle1' className='mb-3'>
                     Trusted Account
                   </Typography>
-                  <Typography className='flex items-center mb-2'>
+                  <Typography className='flex items-center mb-3'>
                     <i className='tabler-user mr-[8px]' /> <strong className='mr-[12px]'>Full Name:</strong>{' '}
                     {(userData?.trustedAccount &&
                       getFullName(userData.trustedAccount?.firstName, userData.trustedAccount?.lastName)) ??
                       'N/A'}
                   </Typography>
-                  <Typography className='flex items-center mb-2'>
+                  <Typography className='flex items-center mb-3'>
                     <i className='tabler-mail mr-[8px]' /> <strong className='mr-[12px]'>Email:</strong>{' '}
                     {userData?.trustedAccount?.email ?? 'N/A'}
                   </Typography>
@@ -228,7 +218,7 @@ const UserInfoDrawer = ({ isLoading, open, handleClose, userData, setData }: Pro
                 </Grid>
 
                 <Grid item xs={12} gap={2} md={6}>
-                  <Typography variant='subtitle1' className='mb-2'>
+                  <Typography variant='subtitle1' className='mb-3'>
                     Dependent (Child) Account
                   </Typography>
                   <Typography className='flex items-center'>
