@@ -17,7 +17,7 @@ const useLayoutInit = (colorSchemeFallback: 'light' | 'dark') => {
   const { setMode } = useColorScheme()
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, updateCookieColorPref] = useCookie('colorPref')
-  const isDark = useMedia('(prefers-color-scheme: dark)', colorSchemeFallback === 'dark')
+  const isDark = useMedia('(prefers-color-scheme: light)', colorSchemeFallback === 'light')
 
   useEffect(() => {
     const appMode = isDark ? 'dark' : 'light'

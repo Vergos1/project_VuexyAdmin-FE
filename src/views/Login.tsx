@@ -1,10 +1,10 @@
 'use client'
 
 // React Imports
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 // Next Imports
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import Image from 'next/image'
 
 import { useDispatch } from 'react-redux'
@@ -42,9 +42,11 @@ import type { AppDispatch } from '@/store/index'
 // Hook Imports
 import { useImageVariant } from '@core/hooks/useImageVariant'
 import { useSettings } from '@core/hooks/useSettings'
-import { loginThunk } from '@/store/slices/auth'
 import TopShapeImg from '../../public/images/illustrations/auth/top-shape-auth.svg'
 import BottomShapeImg from '../../public/images/illustrations/auth/bottom-shape-auth.svg'
+import { useLoginMutation } from '@/store/slices/auth/authApi'
+import { getValidAuthTokens } from '@/utils/cookies'
+import { Preloader } from '@/components/Preloader'
 
 const MaskImg = styled('img')({
   blockSize: 'auto',
@@ -58,6 +60,7 @@ const MaskImg = styled('img')({
 const LoginV2 = ({ mode }: { mode: SystemMode }) => {
   // States
   const [isPasswordShown, setIsPasswordShown] = useState(false)
+  const { token } = getValidAuthTokens()
 
   // Vars
   const darkImg = '/images/pages/auth-mask-dark.png'
@@ -70,8 +73,11 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
     formState: { errors }
   } = useForm()
 
+  const [login, result] = useLoginMutation()
   const dispatch = useDispatch<AppDispatch>()
+  const { push } = useRouter()
   const router = useRouter()
+  const pathname = usePathname()
   const { settings } = useSettings()
   const theme = useTheme()
   const hidden = useMediaQuery(theme.breakpoints.down('md'))
@@ -79,34 +85,40 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
 
   const handleClickShowPassword = () => setIsPasswordShown(show => !show)
 
+  const [isTokenChecked, setIsTokenChecked] = useState(false)
+
+  //   useEffect(() => {
+  //     if (token) {
+  //       push('/home')
+  //     }
+  //   }, [token, push])
+
+  useEffect(() => {
+    if (token) {
+      push(`/home?redirectFrom=${pathname}`)
+    } else {
+      setIsTokenChecked(true)
+    }
+  }, [token, push, dispatch])
+
   const handleLogin: SubmitHandler<FieldValues> = async data => {
     const { email, password } = data as { email: string; password: string }
 
     if (!email || !password) return
-    dispatch(loginThunk({ email, password }))
+
+    await login({ email, password })
+  }
+
+  if (!isTokenChecked) {
+    return <Preloader />
   }
 
   return (
     <div className='flex bs-full justify-center'>
-      {/* <div
-        className={classnames(
-          'flex bs-full items-center just   ify-center flex-1 min-bs-[100dvh] relative p-6 max-md:hidden',
-          {
-            'border-ie': settings.skin === 'bordered'
-          }
-        )}
-      >
-        {!hidden && (
-          <MaskImg
-            alt='mask'
-            src={authBackground}
-            className={classnames({ 'scale-x-[-1]': theme.direction === 'rtl' })}
-          />
-        )}
-      </div> */}
       <div className='flex justify-center items-center bs-full !min-is-full p-6 md:!min-is-[unset] md:p-12 md:is-[520px] overflow-hidden sm:overflow-visible'>
         <div className='relative p-10 bg-backgroundPaper flex flex-col gap-6 is-full sm:is-auto md:is-full sm:max-is-[400px] md:max-is-[unset] mbs-11 sm:mbs-14 md:mbs-0'>
           <Image className='absolute top-[-12%] left-[-17%] z-[-1]' src={TopShapeImg} alt='shape-top' />
+          <Image className='absolute top-[5%] left-[5%] z-[-1]' src={TopShapeImg} alt='shape-top' />
           <Image className='absolute bottom-[-15%] right-[-20%] z-[-1]' src={BottomShapeImg} alt='shape-bottom' />
           <Link className='flex justify-center items-center block-start-5 sm:block-start-[33px] inline-start-6 sm:inline-start-[38px]'>
             <Logo color='#F1BB30' />

@@ -1,25 +1,21 @@
 // Third-party Imports
 import { configureStore } from '@reduxjs/toolkit'
+import { setupListeners } from '@reduxjs/toolkit/query'
 
 // Slice Imports
-import authSlice from './slices/auth'
-
-// import calendarReducer from '@/redux-store/slices/calendar'
-// import kanbanReducer from '@/redux-store/slices/kanban'
-// import emailReducer from '@/redux-store/slices/email'
+import authSlice from './slices/auth/auth'
+import { authApi } from './slices/auth/authApi'
 
 export const store = configureStore({
   reducer: {
-    authSlice
-
-    // chatReducer,
-    // calendarReducer,
-    // kanbanReducer,
-    // emailReducer
+    authSlice,
+    [authApi.reducerPath]: authApi.reducer
   },
-  middleware: getDefaultMiddleware => getDefaultMiddleware({ serializableCheck: false }),
+  middleware: getDefaultMiddleware => getDefaultMiddleware({ serializableCheck: false }).concat(authApi.middleware),
   devTools: true
 })
+
+setupListeners(store.dispatch)
 
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
