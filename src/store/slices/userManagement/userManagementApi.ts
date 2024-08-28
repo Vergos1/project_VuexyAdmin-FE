@@ -1,19 +1,17 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi } from '@reduxjs/toolkit/query/react'
 
-import type { UserResponse } from '@/types/userTypes'
-import { BASE_API_URL } from '@/utils/constants'
+import { baseQuery } from '../baseQuery'
 
 export const userManagementApi = createApi({
   reducerPath: 'userApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl: BASE_API_URL
-  }),
+  baseQuery,
   endpoints: builder => ({
-    getUsers: builder.query<UserResponse[], void>({
+    getUsers: builder.query({
       query: () => ({
         url: 'users',
         method: 'GET'
-      })
+      }),
+      transformResponse: response => response ?? []
     })
   })
 })

@@ -14,6 +14,8 @@ export const getValidAuthTokens = () => {
 
   if (!token) return { token: undefined }
 
+  console.log('Auth token:', token)
+
   return { token }
 
   //? this will be used to check if the token is valid

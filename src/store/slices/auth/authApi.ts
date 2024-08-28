@@ -2,12 +2,11 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 import type { LoginResponse } from '@/types/authTypes'
 import { BASE_API_URL } from '@/utils/constants'
+import { baseQuery } from '../baseQuery'
 
 export const authApi = createApi({
   reducerPath: 'authApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl: BASE_API_URL
-  }),
+  baseQuery,
   endpoints: builder => ({
     login: builder.mutation<LoginResponse, { email: string; password: string }>({
       query: ({ email, password }) => ({

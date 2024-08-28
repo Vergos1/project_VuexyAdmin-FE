@@ -22,7 +22,7 @@ export const AuthGuard = ({ children }: Props) => {
   const { push } = useRouter()
   const pathname = usePathname()
 
-  const { user } = useSelector((state: RootState) => state.authSlice)
+  const { user } = useSelector((state: RootState) => state.auth)
   const [isTokenChecked, setIsTokenChecked] = useState(false)
 
   const { token } = getValidAuthTokens()

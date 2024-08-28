@@ -7,3 +7,11 @@ export const Preloader = () => {
     </div>
   )
 }
+
+export const ComponentPreloader = () => {
+  return (
+    <div className='absolute top-0 left-0 w-full h-full flex justify-center items-center z-9999'>
+      <Logo className='animate-bounce' color='#F1BB30' />
+    </div>
+  )
+}

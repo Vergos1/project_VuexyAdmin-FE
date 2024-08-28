@@ -2,16 +2,23 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/query'
 
+// API Imports
+import { authApi } from './slices/auth/authApi'
+import { userManagementApi } from './slices/userManagement/userManagementApi'
+
 // Slice Imports
 import authSlice from './slices/auth/auth'
-import { authApi } from './slices/auth/authApi'
+import userManagementSlice from './slices/userManagement/userManagement'
 
 export const store = configureStore({
   reducer: {
-    authSlice,
-    [authApi.reducerPath]: authApi.reducer
+    [authApi.reducerPath]: authApi.reducer,
+    [userManagementApi.reducerPath]: userManagementApi.reducer,
+    auth: authSlice,
+    user: userManagementSlice
   },
-  middleware: getDefaultMiddleware => getDefaultMiddleware({ serializableCheck: false }).concat(authApi.middleware),
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({ serializableCheck: false }).concat(authApi.middleware, userManagementApi.middleware),
   devTools: true
 })
 
