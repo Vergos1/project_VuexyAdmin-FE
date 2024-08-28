@@ -2,18 +2,18 @@ import { createSlice } from '@reduxjs/toolkit'
 
 import { moderationApi } from './moderationApi'
 
-export type UserStateTypes = {
+export type ModerationStateTypes = {
   posts: any
   post: any
 }
 
-const initialState: UserStateTypes = {
+const initialState: ModerationStateTypes = {
   posts: [],
   post: {}
 }
 
 const moderationSlice = createSlice({
-  name: 'user',
+  name: 'moderation',
   initialState,
   reducers: {},
   extraReducers: builder => {

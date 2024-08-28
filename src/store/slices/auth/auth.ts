@@ -29,7 +29,7 @@ const initialState: AuthStateTypes = {
 }
 
 const authSlice = createSlice({
-  name: 'chat',
+  name: 'auth',
   initialState,
   reducers: {
     logout: state => {

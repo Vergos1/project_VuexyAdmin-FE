@@ -2,18 +2,18 @@ import { createSlice } from '@reduxjs/toolkit'
 
 import { userManagementApi } from './userManagementApi'
 
-export type UserStateTypes = {
+export type UserManagementTypes = {
   users: any
   user: any
 }
 
-const initialState: UserStateTypes = {
+const initialState: UserManagementTypes = {
   users: [],
   user: {}
 }
 
 const userManagementSlice = createSlice({
-  name: 'user',
+  name: 'userManagement',
   initialState,
   reducers: {},
   extraReducers: builder => {
