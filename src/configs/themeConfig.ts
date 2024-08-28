@@ -52,7 +52,7 @@ export type Config = {
 const themeConfig: Config = {
   templateName: 'Encore',
   homePageUrl: '/home',
-  settingsCookieName: 'vuexy-mui-next-demo-1',
+  settingsCookieName: 'encore-mui-next-demo-1',
   mode: 'light', // 'system', 'light', 'dark'
   skin: 'default', // 'default', 'bordered'
   semiDark: false, // true, false

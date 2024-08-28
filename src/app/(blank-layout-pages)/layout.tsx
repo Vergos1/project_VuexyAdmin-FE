@@ -7,6 +7,7 @@ import BlankLayout from '@layouts/BlankLayout'
 
 // Util Imports
 import { getSystemMode } from '@core/utils/serverHelpers'
+import { AuthGuard } from '@/hocs/AuthGuard'
 
 type Props = ChildrenType
 

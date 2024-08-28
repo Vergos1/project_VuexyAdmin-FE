@@ -97,6 +97,7 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
             activeUrlPrefix='/moderation'
             icon={<i className='tabler-file-text' />}
           >
+          <MenuItem href='/moderation' icon={<i className='tabler-file-text' />}>
             User content moderation
           </MenuItem>
         </MenuSection>

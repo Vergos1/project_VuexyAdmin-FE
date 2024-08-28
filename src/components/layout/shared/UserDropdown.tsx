@@ -7,6 +7,9 @@ import type { MouseEvent } from 'react'
 // Next Imports
 import { useRouter } from 'next/navigation'
 
+// Redux Imports
+import { useDispatch } from 'react-redux'
+
 // MUI Imports
 import { styled } from '@mui/material/styles'
 import Badge from '@mui/material/Badge'
@@ -23,6 +26,7 @@ import Button from '@mui/material/Button'
 
 // Hook Imports
 import { useSettings } from '@core/hooks/useSettings'
+import { logout } from '@/store/slices/auth/auth'
 
 // Styled component for badge content
 const BadgeContentSpan = styled('span')({
@@ -42,6 +46,7 @@ const UserDropdown = () => {
   const anchorRef = useRef<HTMLDivElement>(null)
 
   // Hooks
+  const dispatch = useDispatch()
   const router = useRouter()
 
   const { settings } = useSettings()
@@ -63,8 +68,8 @@ const UserDropdown = () => {
   }
 
   const handleUserLogout = async () => {
-    // Redirect to login page
-    router.push('/login')
+    // ? Redirect to login page on logout
+    dispatch(logout())
   }
 
   return (

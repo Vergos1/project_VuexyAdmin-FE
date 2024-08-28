@@ -135,71 +135,72 @@ const UserInfoDrawer = (props: Props) => {
           <Grid container className='plb-6 gap-y-6' maxWidth='600px' spacing={2}>
             <Grid item xs={12} md={6}>
               <Typography variant='subtitle1' className='mb-2'>
-                <i className='tabler-user' /> About
+                About
               </Typography>
-              <Typography className='flex items-center'>
-                <i className='tabler-id mr-[8px]' /> <strong className='mr-[12px]'>Full Name:</strong> {user.fullName}
+              <Typography className='flex items-center mb-2'>
+                <i className='tabler-user mr-[8px]' /> <strong className='mr-[12px]'>Full Name:</strong> {user.fullName}
               </Typography>
-              <Typography className='flex items-center'>
-                <i className='tabler-hash mr-[8px]' /> <strong className='mr-[12px]'>User ID:</strong> {user.id}
+              <Typography className='flex items-center mb-2'>
+                <i className='tabler-user-exclamation mr-[8px]' /> <strong className='mr-[12px]'>User ID:</strong>{' '}
+                {user.id}
               </Typography>
-              <Typography className='flex items-center'>
+              <Typography className='flex items-center mb-2'>
                 <i className='tabler-mail mr-[8px]' /> <strong className='mr-[12px]'>Email:</strong> {user.email}
               </Typography>
-              <Typography className='flex items-center'>
+              <Typography className='flex items-center mb-2'>
                 <i className='tabler-calendar mr-[8px]' /> <strong className='mr-[12px]'>Date of Birth:</strong>{' '}
                 {user.dob}
               </Typography>
               <Typography className='flex items-center'>
-                <i className='tabler-status mr-[8px]' /> <strong className='mr-[12px]'>Status:</strong> {user.status}
+                <i className='tabler-check mr-[8px]' /> <strong className='mr-[12px]'>Status:</strong> {user.status}
               </Typography>
             </Grid>
 
             <Grid item xs={12} md={6}>
               <Typography variant='subtitle1' className='mb-2'>
-                <i className='tabler-plan mr-[8px]' /> Tariff Plan
+                Tariff Plan
               </Typography>
-              <Typography className='flex items-center'>
-                <i className='tabler-box mr-[8px]' /> <strong className='mr-[12px]'>Plan:</strong> {user.plan}
+              <Typography className='flex items-center mb-2'>
+                <i className='tabler-businessplan mr-[8px]' /> <strong className='mr-[12px]'>Plan:</strong> {user.plan}
               </Typography>
-              <Typography className='flex items-center'>
+              <Typography className='flex items-center mb-2'>
                 <i className='tabler-microphone mr-[8px]' /> <strong className='mr-[12px]'>Voice Recording:</strong>{' '}
                 {user.voiceRecording}
               </Typography>
-              <Typography className='flex items-center'>
-                <i className='tabler-question mr-[8px]' /> <strong className='mr-[12px]'>Inspiration Questions:</strong>{' '}
-                {user.inspirationQuestions}
+              <Typography className='flex items-center mb-2'>
+                <i className='tabler-question-mark mr-[8px]' />{' '}
+                <strong className='mr-[12px]'>Inspiration Questions:</strong> {user.inspirationQuestions}
               </Typography>
               <Typography className='flex items-center'>
-                <i className='tabler-list mr-[8px]' /> <strong className='mr-[12px]'>Categories:</strong> Animals,
-                Family, Health
+                <i className='tabler-question-mark mr-[8px]' /> <strong className='mr-[12px]'>Categories:</strong>{' '}
+                Animals, Family, Health
               </Typography>
             </Grid>
 
             <Grid item xs={12} md={6}>
               <Typography variant='subtitle1' className='mb-2'>
-                <i className='tabler-heart mr-[8px]' /> Trusted Account
+                Trusted Account
               </Typography>
-              <Typography className='flex items-center'>
+              <Typography className='flex items-center mb-2'>
                 <i className='tabler-user mr-[8px]' /> <strong className='mr-[12px]'>Full Name:</strong>{' '}
                 {user.trustedAccount.fullName}
               </Typography>
-              <Typography className='flex items-center'>
+              <Typography className='flex items-center mb-2'>
                 <i className='tabler-mail mr-[8px]' /> <strong className='mr-[12px]'>Email:</strong>{' '}
                 {user.trustedAccount.email}
               </Typography>
               <Typography className='flex items-center'>
-                <i className='tabler-mail mr-[8px]' /> <strong className='mr-[12px]'>Relationship:</strong>{' '}
+                <i className='tabler-repeat mr-[8px]' /> <strong className='mr-[12px]'>Relationship:</strong>{' '}
                 {user.trustedAccount.relationship}
               </Typography>
             </Grid>
 
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} gap={2} md={6}>
               <Typography variant='subtitle1' className='mb-2'>
-                <i className='tabler-users' /> Dependent (Child) Account
+                Dependent (Child) Account
               </Typography>
               <Typography className='flex items-center'>
-                <i className='tabler-mail mr-[8px]' /> <strong className='mr-[12px]'>Participants:</strong>{' '}
+                <i className='tabler-mood-boy mr-[8px]' /> <strong className='mr-[12px]'>Participants:</strong>{' '}
                 {user.dependentAccount.participants}
               </Typography>
             </Grid>

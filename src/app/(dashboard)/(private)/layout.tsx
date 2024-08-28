@@ -20,7 +20,7 @@ import ScrollToTop from '@core/components/scroll-to-top'
 
 // Util Imports
 import { getMode, getSystemMode } from '@core/utils/serverHelpers'
-import AuthGuard from '@/hocs/AuthGuard'
+import { AuthGuard } from '@/hocs/AuthGuard'
 
 const Layout = async ({ children }: ChildrenType) => {
   // Vars

@@ -1,6 +1,7 @@
+import { TextareaAutosize } from '@mui/material'
+
 import CustomTextField from '@/@core/components/mui/TextField'
 import ContentTabs from '@/views/content/Tabs'
-import { TextareaAutosize } from '@mui/material'
 
 const Page = () => {
   return (
