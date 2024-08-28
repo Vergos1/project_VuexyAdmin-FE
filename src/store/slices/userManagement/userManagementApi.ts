@@ -10,10 +10,15 @@ export const userManagementApi = createApi({
       query: () => ({
         url: 'users',
         method: 'GET'
-      }),
-      transformResponse: response => response ?? []
+      })
+    }),
+    getUserInfoById: builder.query({
+      query: (id: string) => ({
+        url: `users/${id}`,
+        method: 'GET'
+      })
     })
   })
 })
 
-export const { useGetUsersQuery } = userManagementApi
+export const { useGetUsersQuery, useLazyGetUserInfoByIdQuery } = userManagementApi

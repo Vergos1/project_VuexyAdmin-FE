@@ -56,6 +56,7 @@ import { getInitials } from '@/utils/getInitials'
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
 import { getFullName } from '@/utils/getFullName'
+import { useLazyGetUserInfoByIdQuery } from '@/store/slices/userManagement/userManagementApi'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -143,14 +144,24 @@ const columnHelper = createColumnHelper<UsersTypeWithAction>()
 
 const UserListTable = ({ tableData }: { tableData?: any[] }) => {
   //! DELETE
-  console.log('user data:', tableData)
+  //console.log('user data:', tableData)
 
   // States
   const [addUserOpen, setAddUserOpen] = useState(false)
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null)
   const [rowSelection, setRowSelection] = useState({})
   const [data, setData] = useState(...[tableData])
   const [filteredData, setFilteredData] = useState(data)
   const [globalFilter, setGlobalFilter] = useState('')
+
+  const [getUserInfoById, { data: userInfo, isLoading }] = useLazyGetUserInfoByIdQuery()
+
+  const handleUserDetailsClick = (id: string) => {
+    setSelectedUserId(id)
+    setAddUserOpen(true)
+    console.log('handleUserDetailsClick', id)
+    getUserInfoById(id) //? Викликаємо запит для отримання даних користувача
+  }
 
   const columns = useMemo<ColumnDef<UsersTypeWithAction, any>[]>(
     () => [
@@ -242,7 +253,7 @@ const UserListTable = ({ tableData }: { tableData?: any[] }) => {
                   text: 'User details',
                   icon: 'tabler-info-circle',
                   menuItemProps: { className: 'flex items-center gap-2 text-textSecondary' },
-                  onClick: () => setAddUserOpen(true)
+                  onClick: () => handleUserDetailsClick(row.original.id) //?? Передаємо ID користувача
                 },
                 {
                   text: 'Block user',
@@ -434,9 +445,10 @@ const UserListTable = ({ tableData }: { tableData?: any[] }) => {
         />
       </Card>
       <UserInfoDrawer
+        isLoading={isLoading}
         open={addUserOpen}
         handleClose={() => setAddUserOpen(!addUserOpen)}
-        userData={data}
+        userData={userInfo}
         setData={setData}
       />
     </>
