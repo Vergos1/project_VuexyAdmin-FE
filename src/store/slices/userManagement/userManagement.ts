@@ -25,6 +25,9 @@ const userManagementSlice = createSlice({
       console.log('payload', payload)
       state.user = payload
     })
+    builder.addMatcher(userManagementApi.endpoints.blockUserById.matchFulfilled, (state, { payload }) => {
+      console.log('payload', payload)
+    })
 
     //REJECTED MATCHERS
     builder.addMatcher(userManagementApi.endpoints.getUsers.matchRejected, (state, { error }) => {

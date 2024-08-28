@@ -56,7 +56,7 @@ import { getInitials } from '@/utils/getInitials'
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
 import { getFullName } from '@/utils/getFullName'
-import { useLazyGetUserInfoByIdQuery } from '@/store/slices/userManagement/userManagementApi'
+import { useBlockUserByIdMutation, useLazyGetUserInfoByIdQuery } from '@/store/slices/userManagement/userManagementApi'
 import { getAvatar } from '@/utils/getAvatar'
 
 declare module '@tanstack/table-core' {
@@ -155,7 +155,20 @@ const UserListTable = ({ tableData }: { tableData?: any[] }) => {
   const [filteredData, setFilteredData] = useState(data)
   const [globalFilter, setGlobalFilter] = useState('')
 
-  const [getUserInfoById, { data: userInfo, isLoading }] = useLazyGetUserInfoByIdQuery()
+  useEffect(() => {
+    setData(...[tableData])
+  }, [tableData])
+
+  const [getUserInfoById, { data: userInfo, isLoading: isUserInfoLoading }] = useLazyGetUserInfoByIdQuery()
+  const [blockUserById, { isLoading: isBlockLoading, error }] = useBlockUserByIdMutation()
+
+  const handleBlockUser = async (id: string) => {
+    try {
+      await blockUserById(id).unwrap()
+    } catch (error) {
+      console.error('Failed to block user:', error)
+    }
+  }
 
   const handleUserDetailsClick = (id: string) => {
     setSelectedUserId(id)
@@ -259,7 +272,7 @@ const UserListTable = ({ tableData }: { tableData?: any[] }) => {
                   text: 'Block user',
                   icon: 'tabler-circle-x',
                   menuItemProps: { className: 'flex items-center gap-2 text-error' },
-                  onClick: () => blockUser(row.original.id)
+                  onClick: () => handleBlockUser(row.original.id)
                 }
               ]}
             />
@@ -300,31 +313,6 @@ const UserListTable = ({ tableData }: { tableData?: any[] }) => {
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getFacetedMinMaxValues: getFacetedMinMaxValues()
   })
-
-  const blockUser = async (id: number) => {
-    console.log('Block user', id)
-    console.log('URL', `${process.env.API_URL}/users/status/${id}`)
-
-    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/users/status/${id}`, {
-      method: 'POST'
-    })
-
-    console.log('Block user', id)
-
-    if (res.ok) {
-      const data = await res.json()
-
-      console.log('Response:', data)
-    } else {
-      console.error('Error:', res.statusText)
-    }
-
-    if (!res.ok) {
-      throw new Error('Failed to fetch userData')
-    }
-
-    return res.json()
-  }
 
   return (
     <>
@@ -433,7 +421,7 @@ const UserListTable = ({ tableData }: { tableData?: any[] }) => {
         />
       </Card>
       <UserInfoDrawer
-        isLoading={isLoading}
+        isLoading={isUserInfoLoading}
         open={addUserOpen}
         handleClose={() => setAddUserOpen(!addUserOpen)}
         userData={userInfo}

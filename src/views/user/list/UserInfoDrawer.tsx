@@ -81,8 +81,6 @@ const UserInfoDrawer = ({ isLoading, open, handleClose, userData, setData }: Pro
   // States
   const [formData, setFormData] = useState<FormNonValidateType>(initialData)
 
-  console.log('userData', userData)
-
   // Hooks
   const {
     control,

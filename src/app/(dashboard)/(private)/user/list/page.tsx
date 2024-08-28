@@ -19,17 +19,20 @@ import { useGetUsersQuery } from '@/store/slices/userManagement/userManagementAp
  */
 
 const UserListApp = () => {
-  const { data: users = [] as any, error, isLoading } = useGetUsersQuery([])
+  const { data: users = [], error, isLoading } = useGetUsersQuery([])
+  const [userData, setUserData] = useState([])
 
   useEffect(() => {
-    if (error) {
-      console.error('Error loading users:', error)
+    if (users) {
+      setUserData(users)
     }
-  }, [error])
+  }, [users])
+
+  console.log('User data:', userData)
 
   console.log('Users:', users)
 
-  return <UserList isLoading={isLoading} userData={users} />
+  return <UserList isLoading={isLoading} userData={userData} />
 }
 
 export default UserListApp
