@@ -1,12 +1,6 @@
 'use client'
 
-// React Imports
-import { useEffect, useState } from 'react'
-
-import { useRouter } from 'next/navigation'
-
 // Component Imports
-import api from '@/api/api'
 import UserList from '@/views/user/list'
 
 import { useGetUsersQuery } from '@/store/slices/userManagement/userManagementApi'
@@ -20,19 +14,10 @@ import { useGetUsersQuery } from '@/store/slices/userManagement/userManagementAp
 
 const UserListApp = () => {
   const { data: users = [], error, isLoading } = useGetUsersQuery([])
-  const [userData, setUserData] = useState([])
-
-  useEffect(() => {
-    if (users) {
-      setUserData(users)
-    }
-  }, [users])
-
-  console.log('User data:', userData)
 
   console.log('Users:', users)
 
-  return <UserList isLoading={isLoading} userData={userData} />
+  return <UserList isLoading={isLoading} userData={users} />
 }
 
 export default UserListApp

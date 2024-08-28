@@ -2,7 +2,8 @@
 const nextConfig = {
   basePath: process.env.BASEPATH,
   env: {
-    API_URL: process.env.NEXT_PUBLIC_API_URL
+    PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+    BASE_API_URL: process.env.NEXT_BASE_API_URL
   },
   redirects: async () => {
     return [

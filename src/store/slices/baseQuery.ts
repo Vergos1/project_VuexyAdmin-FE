@@ -1,10 +1,9 @@
 import { fetchBaseQuery } from '@reduxjs/toolkit/query'
 
-import { BASE_API_URL } from '@/utils/constants'
 import { getValidAuthTokens } from '@/utils/cookies'
 
 export const baseQuery = fetchBaseQuery({
-  baseUrl: BASE_API_URL,
+  baseUrl: process.env.BASE_API_URL,
   prepareHeaders: headers => {
     const { token } = getValidAuthTokens()
 
