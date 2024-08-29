@@ -19,7 +19,6 @@ import UserRight from '@views/user/view/user-right'
 
 const OverViewTab = dynamic(() => import('@views/user/view/user-right/overview'))
 const SecurityTab = dynamic(() => import('@views/user/view/user-right/security'))
-const BillingPlans = dynamic(() => import('@views/user/view/user-right/billing-plans'))
 const NotificationsTab = dynamic(() => import('@views/user/view/user-right/notifications'))
 const ConnectionsTab = dynamic(() => import('@views/user/view/user-right/connections'))
 
@@ -27,7 +26,8 @@ const ConnectionsTab = dynamic(() => import('@views/user/view/user-right/connect
 const tabContentList = (data?: any[]): { [key: string]: ReactElement } => ({
   overview: <OverViewTab />,
   security: <SecurityTab />,
-  'billing-plans': <BillingPlans data={data} />,
+
+  //   'billing-plans': <BillingPlans data={data} />,
   notifications: <NotificationsTab />,
   connections: <ConnectionsTab />
 })

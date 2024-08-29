@@ -338,7 +338,7 @@ const ProjectListTable = () => {
           )}
         </table>
       </div>
-      <TablePagination
+      <TablePagination //@ts-expect-error //!DELETE
         component={() => <TablePaginationComponent table={table | []} />}
         count={table.getFilteredRowModel().rows.length}
         rowsPerPage={table.getState().pagination.pageSize}

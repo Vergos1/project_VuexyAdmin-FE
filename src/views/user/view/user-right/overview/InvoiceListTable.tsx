@@ -175,7 +175,8 @@ const InvoiceListTable = ({ invoiceData }: { invoiceData?: any[] }) => {
                 {
                   text: 'Download',
                   icon: 'tabler-download',
-                  menuItemProps: { className: 'flex items-center gap-2 text-textSecondary' }
+                  menuItemProps: { className: 'flex items-center gap-2 text-textSecondary' },
+                  onClick: () => console.log('download')
                 },
                 {
                   text: 'Edit',
@@ -183,12 +184,14 @@ const InvoiceListTable = ({ invoiceData }: { invoiceData?: any[] }) => {
                   href: `/invoice/edit/${row.original.id}`,
                   linkProps: {
                     className: classnames('flex items-center bs-[40px] plb-2 pli-4 is-full gap-2 text-textSecondary')
-                  }
+                  },
+                  onClick: () => console.log('edit')
                 },
                 {
                   text: 'Duplicate',
                   icon: 'tabler-copy',
-                  menuItemProps: { className: 'flex items-center gap-2 text-textSecondary' }
+                  menuItemProps: { className: 'flex items-center gap-2 text-textSecondary' },
+                  onClick: () => console.log('duplicate')
                 }
               ]}
             />

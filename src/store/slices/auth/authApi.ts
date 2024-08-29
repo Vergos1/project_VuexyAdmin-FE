@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 import type { LoginResponse } from '@/types/authTypes'
-import { BASE_API_URL } from '@/utils/constants'
 import { baseQuery } from '../baseQuery'
 
 export const authApi = createApi({

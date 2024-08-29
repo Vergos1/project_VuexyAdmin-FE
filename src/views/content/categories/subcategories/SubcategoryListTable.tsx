@@ -1,7 +1,8 @@
 'use client'
 
 // React Imports
-import { useState, useMemo, ReactNode } from 'react'
+import { useState, useMemo } from 'react'
+import type { ReactNode } from 'react'
 
 // Next Imports
 // import Link from 'next/link'
@@ -11,7 +12,8 @@ import { useRouter } from 'next/navigation'
 
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
-import Button, { ButtonProps } from '@mui/material/Button'
+import Button from '@mui/material/Button'
+import type { ButtonProps } from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import Chip from '@mui/material/Chip'
 import Checkbox from '@mui/material/Checkbox'
