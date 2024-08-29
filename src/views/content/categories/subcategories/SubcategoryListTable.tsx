@@ -1,19 +1,21 @@
 'use client'
 
 // React Imports
-import { useState, useMemo } from 'react'
+
 import type { ReactNode } from 'react'
+import { useState, useMemo } from 'react'
 
 // Next Imports
 // import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 // MUI Imports
 
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
-import Button from '@mui/material/Button'
+
 import type { ButtonProps } from '@mui/material/Button'
+import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import Chip from '@mui/material/Chip'
 import Checkbox from '@mui/material/Checkbox'
@@ -42,6 +44,8 @@ import type { ColumnDef, FilterFn } from '@tanstack/react-table'
 import type { RankingInfo } from '@tanstack/match-sorter-utils'
 
 // Type Imports
+import { useDispatch } from 'react-redux'
+
 import type { ThemeColor } from '@core/types'
 
 // Component Imports
@@ -59,6 +63,7 @@ import tableStyles from '@core/styles/table.module.css'
 import OpenDialogOnElementClick from '@/components/dialogs/OpenDialogOnElementClick'
 import AddNewCategory from '@/components/dialogs/add-edit-category'
 import ActionModal from '@/components/dialogs/action-modal'
+import { setSelectedCategory, setSelectedSubcategory } from '@/store/slices/categories/categories'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -100,6 +105,8 @@ const columnHelper = createColumnHelper<UsersTypeWithAction>()
 const SubcategoryListTable = ({ title, tableData }: { title: string; tableData?: any[] }) => {
   //Init
   const router = useRouter()
+  const pathname = usePathname()
+  const dispatch = useDispatch()
 
   // States
   const [rowSelection, setRowSelection] = useState({})
@@ -175,8 +182,9 @@ const SubcategoryListTable = ({ title, tableData }: { title: string; tableData?:
     getFacetedMinMaxValues: getFacetedMinMaxValues()
   })
 
-  const redirectToQuestions = (id: string) => {
-    router.push(`/content/categories/subcategories/questions`)
+  const redirectToQuestions = (subcategory: any) => {
+    router.push(`${pathname}/${subcategory.id}/questions`)
+    dispatch(setSelectedSubcategory(subcategory))
   }
 
   const buttonProps = (
@@ -229,7 +237,7 @@ const SubcategoryListTable = ({ title, tableData }: { title: string; tableData?:
                   .map(row => {
                     return (
                       <tr
-                        onClick={() => redirectToQuestions(row.original.id)}
+                        onClick={() => redirectToQuestions(row.original)}
                         key={row.id}
                         className={
                           (classnames({
