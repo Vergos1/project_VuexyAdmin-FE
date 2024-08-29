@@ -160,7 +160,7 @@ const UserListTable = ({ tableData }: { tableData?: any[] }) => {
   }, [tableData])
 
   const [getUserInfoById, { data: userInfo, isLoading: isUserInfoLoading }] = useLazyGetUserInfoByIdQuery()
-  const [changeUserStatusById, { isLoading: isBlockLoading, error }] = useChangeUserStatusByIdMutation()
+  const [changeUserStatusById] = useChangeUserStatusByIdMutation()
 
   const handleChangeUserStatus = async (id: string) => {
     try {
