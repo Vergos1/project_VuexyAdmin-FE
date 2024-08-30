@@ -15,9 +15,11 @@ import ContentTabs from '@/views/content/Tabs'
 import { useGetCategoryByIdQuery } from '@/store/slices/categories/categoriesApi'
 import { ComponentPreloader } from '@/components/Preloader'
 
+import type { RootState } from '@/store'
+
 export default function Page() {
   const { subCategoryId } = useParams()
-  const { category } = useSelector(state => state.categories)
+  const { category } = useSelector((state: RootState) => state.categories)
   const { data, isLoading } = useGetCategoryByIdQuery({ id: subCategoryId as string })
 
   return (
