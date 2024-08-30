@@ -61,6 +61,7 @@ import {
   useLazyGetUserInfoByIdQuery
 } from '@/store/slices/userManagement/userManagementApi'
 import { getAvatar } from '@/utils/getAvatar'
+import type { MetaType, UsersListType } from '@/types/userTypes'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -146,7 +147,12 @@ const userStatusObj: UserStatusType = {
 // Column Definitions
 const columnHelper = createColumnHelper<UsersTypeWithAction>()
 
-const UserListTable = ({ tableData }: { tableData?: any[] }) => {
+interface UsersListTableProps {
+  tableData: UsersListType[] | []
+  meta: MetaType | {}
+}
+
+const UserListTable = ({ tableData, meta }: UsersListTableProps) => {
   // States
   const [addUserOpen, setAddUserOpen] = useState(false)
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null)

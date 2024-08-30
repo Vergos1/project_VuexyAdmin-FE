@@ -42,6 +42,8 @@ const authSlice = createSlice({
   },
   extraReducers: builder => {
     builder
+
+      //FULFILLED MATCHERS
       .addMatcher(authApi.endpoints.login.matchFulfilled, (state, { payload }) => {
         //? set the token in the cookies
         //? store the user data in the store
@@ -50,14 +52,21 @@ const authSlice = createSlice({
         state.user = payload.user
         state.token = payload.token
       })
+      .addMatcher(authApi.endpoints.getAuthStatus.matchFulfilled, (state, { payload }) => {
+        //? in case we receive a new token when refetching the details
+        console.log('payload', payload)
+
+        // setAuthCookie(payload.token, 'auth_token')
+        // state.user = payload.user
+        // state.token = payload.token
+      })
+
+      //REJECTED MATCHERS
       .addMatcher(authApi.endpoints.login.matchRejected, (state, { error }) => {
         console.error('Login failed:', error)
       })
-      .addMatcher(authApi.endpoints.getAuthStatus.matchFulfilled, (state, { payload }) => {
-        //? in case we receive a new token when refetching the details
-        setAuthCookie(payload.token, 'auth_token')
-        state.user = payload.user
-        state.token = payload.token
+      .addMatcher(authApi.endpoints.getAuthStatus.matchRejected, (state, { error }) => {
+        console.error('Get auth status failed:', error)
       })
   }
 })

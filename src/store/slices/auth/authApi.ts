@@ -17,7 +17,7 @@ export const authApi = createApi({
         }
       })
     }),
-    getAuthStatus: builder.query<LoginResponse, { token: string; user: object | string }>({
+    getAuthStatus: builder.query<LoginResponse, { token: string }>({
       query: ({ token }) => ({
         url: 'auth/status',
         method: 'GET',
@@ -29,4 +29,4 @@ export const authApi = createApi({
   })
 })
 
-export const { useLoginMutation, useGetAuthStatusQuery } = authApi
+export const { useLoginMutation, useGetAuthStatusQuery, endpoints } = authApi

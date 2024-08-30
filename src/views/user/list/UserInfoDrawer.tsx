@@ -22,6 +22,7 @@ import { ComponentPreloader } from '@/components/Preloader'
 import { getFullName } from '@/utils/getFullName'
 import { getFormattedDate } from '@/utils/getFormattedDate'
 import { getAvatar } from '@/utils/getAvatar'
+import type { UserType } from '@/types/userTypes'
 
 // Types Imports
 // import type { UsersType } from '@/types/apps/userTypes'
@@ -29,30 +30,10 @@ import { getAvatar } from '@/utils/getAvatar'
 type Props = {
   open: boolean
   handleClose: () => void
-  userData?: {
-    birthDate: string
-    categories: []
-    trustedAccount: {
-      firstName: string
-      lastName: string
-      email: string
-      relationship: string
-    }
-    dependentAccount: string[]
-    email: string
-    firstName: string
-    id: string
-    lastName: string
-    plan: 'Moments' | 'Moments Deluxe (Monthly)' | 'Moments Deluxe (Annual)'
-    questionsAmount: number
-    status: 'active' | 'blocked' | 'unverified'
-    voiceRecordsLength: number
-  }
+  userData: UserType
   setData: (data: any[]) => void
 
   //   setData: (data: UsersType[]) => void
-
-  //   userData?: UsersType[]
 }
 
 type FormValidateType = {

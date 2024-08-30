@@ -1,4 +1,8 @@
-import Logo from '@/@core/svg/Logo'
+import dynamic from 'next/dynamic'
+
+const Logo = dynamic(() => import('@/@core/svg/Logo'), {
+  ssr: false
+})
 
 export const Preloader = () => {
   return (

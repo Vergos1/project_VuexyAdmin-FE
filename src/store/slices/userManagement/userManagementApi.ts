@@ -1,6 +1,12 @@
+import { MetaType, UsersListType } from './../../../types/userTypes'
 import { createApi } from '@reduxjs/toolkit/query/react'
 
 import { baseQuery } from '../baseQuery'
+
+export interface UsersResponse {
+  data: UsersListType[] | []
+  meta: MetaType | {}
+}
 
 export const userManagementApi = createApi({
   reducerPath: 'userApi',
@@ -12,7 +18,11 @@ export const userManagementApi = createApi({
         url: 'users',
         method: 'GET'
       }),
-      providesTags: ['User']
+      providesTags: ['User'],
+      transformResponse: (response: UsersResponse) => ({
+        data: response ? response.data : [],
+        meta: response ? response.meta : {}
+      })
     }),
     getUserInfoById: builder.query({
       query: (id: string) => ({

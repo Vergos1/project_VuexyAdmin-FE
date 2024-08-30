@@ -2,6 +2,9 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/query'
 
+// Middleware Imports
+import authMiddleware from './middleware/authMiddleware'
+
 // API Imports
 import { authApi } from './slices/auth/authApi'
 import { userManagementApi } from './slices/userManagement/userManagementApi'
