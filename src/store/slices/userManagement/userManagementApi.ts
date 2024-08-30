@@ -1,5 +1,6 @@
-import { MetaType, UsersListType } from './../../../types/userTypes'
 import { createApi } from '@reduxjs/toolkit/query/react'
+
+import type { MetaType, UsersListType } from './../../../types/userTypes'
 
 import { baseQuery } from '../baseQuery'
 
