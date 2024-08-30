@@ -5,8 +5,6 @@ import { baseQuery } from '../baseQuery'
 export const categoriesApi = createApi({
   reducerPath: 'categoriesApi',
   baseQuery,
-
-  // tagTypes: ['Post'],
   endpoints: builder => ({
     getCategories: builder.query<any, void>({
       query: () => ({

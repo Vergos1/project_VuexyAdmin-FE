@@ -51,6 +51,6 @@ export const { setSelectedCategory, setSelectedSubcategory } = categoriesSlice.a
 
 // Selectors
 export const selectCategoryById = (state: { categories: UserStateTypes }, id: string) =>
-  state.categories.categories.find(category => category.id === id)
+  state.categories.categories.find((category: any) => category.id === id)
 
 export default categoriesSlice.reducer
