@@ -42,6 +42,8 @@ import type { ColumnDef, FilterFn } from '@tanstack/react-table'
 import type { RankingInfo } from '@tanstack/match-sorter-utils'
 
 // Type Imports
+import { useDispatch } from 'react-redux'
+
 import type { ThemeColor } from '@core/types'
 
 // Component Imports
@@ -59,6 +61,7 @@ import tableStyles from '@core/styles/table.module.css'
 import OpenDialogOnElementClick from '@/components/dialogs/OpenDialogOnElementClick'
 import AddNewCategory from '@/components/dialogs/add-edit-category'
 import ActionModal from '@/components/dialogs/action-modal'
+import { setSelectedCategory } from '@/store/slices/categories/categories'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -100,6 +103,7 @@ const columnHelper = createColumnHelper<UsersTypeWithAction>()
 const CategoryListTable = ({ tableData }: { tableData?: any[] }) => {
   //Init
   const router = useRouter()
+  const dispatch = useDispatch()
 
   // States
   //   const [addUserOpen, setAddUserOpen] = useState(false)
@@ -177,8 +181,9 @@ const CategoryListTable = ({ tableData }: { tableData?: any[] }) => {
     getFacetedMinMaxValues: getFacetedMinMaxValues()
   })
 
-  const redirectToSubCategory = (id: string) => {
-    router.push(`/content/categories/subcategories`)
+  const redirectToSubCategory = (category: any) => {
+    router.push(`/content/categories/${category.id}/subcategories`)
+    dispatch(setSelectedCategory(category))
   }
 
   const buttonProps = (
@@ -240,7 +245,7 @@ const CategoryListTable = ({ tableData }: { tableData?: any[] }) => {
                   .map(row => {
                     return (
                       <tr
-                        onClick={() => redirectToSubCategory(row.original.id)}
+                        onClick={() => redirectToSubCategory(row.original)}
                         key={row.id}
                         className={
                           (classnames({
