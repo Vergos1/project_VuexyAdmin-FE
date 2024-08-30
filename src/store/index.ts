@@ -16,22 +16,26 @@ import userManagementSlice from './slices/userManagement/userManagement'
 import moderationSlice from './slices/moderation/moderation'
 import categoriesSlice from './slices/categories/categories'
 import { categoriesApi } from './slices/categories/categoriesApi'
+import { promptApi } from './slices/promt/promtApi'
 
 export const store = configureStore({
   reducer: {
     [authApi.reducerPath]: authApi.reducer,
     [userManagementApi.reducerPath]: userManagementApi.reducer,
     [moderationApi.reducerPath]: moderationApi.reducer,
+    [promptApi.reducerPath]: promptApi.reducer,
     [categoriesApi.reducerPath]: categoriesApi.reducer,
     auth: authSlice,
     user: userManagementSlice,
     moderation: moderationSlice,
+    promt: promptApi.reducer,
     categories: categoriesSlice
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({ serializableCheck: false }).concat(
       authApi.middleware,
       userManagementApi.middleware,
+      promptApi.middleware,
       moderationApi.middleware,
       categoriesApi.middleware
     ),

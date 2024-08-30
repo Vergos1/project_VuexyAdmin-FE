@@ -235,11 +235,13 @@ const UserListTable = ({ tableData, meta }: UsersListTableProps) => {
           </div>
         )
       }),
-      columnHelper.accessor('currentPlan', {
+      columnHelper.accessor('subscriptionType', {
         header: 'Plan',
         cell: ({ row }) => (
           <Typography className='capitalize' color='text.primary'>
-            {row.original.currentPlan}
+            {row.original.subscriptionType === 'free' && 'Moments'}
+            {row.original.subscriptionType === 'monthly' && 'Moments Deluxe (Monthly)'}
+            {row.original.subscriptionType === 'annual' && 'Moments Deluxe (Annual)'}
           </Typography>
         )
       }),

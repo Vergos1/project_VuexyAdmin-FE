@@ -13,11 +13,15 @@ import ContentTabs from '@/views/content/Tabs'
 import { selectCategoryById, setSelectedCategory } from '@/store/slices/categories/categories'
 import { categoriesApi } from '@/store/slices/categories/categoriesApi'
 import { ComponentPreloader } from '@/components/Preloader'
+import type { RootState } from '@/store'
 
 export default function Page() {
   const { categoryId } = useParams()
   const dispatch = useDispatch()
-  const category = useSelector(state => selectCategoryById(state, categoryId))
+
+  const category = useSelector((state: RootState) =>
+    selectCategoryById(state, Array.isArray(categoryId) ? categoryId[0] : categoryId)
+  )
 
   const [trigger, { data, isLoading }] = categoriesApi.endpoints.getCategories.useLazyQuery()
 

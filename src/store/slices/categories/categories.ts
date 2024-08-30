@@ -29,20 +29,36 @@ const categoriesSlice = createSlice({
     builder.addMatcher(categoriesApi.endpoints.getCategories.matchFulfilled, (state, { payload }) => {
       state.categories = payload || []
     })
-
-    // builder.addMatcher(moderationApi.endpoints.getPostInfoById.matchFulfilled, (state, { payload }) => {
-    //   console.log('payload', payload)
-    //   state.post = payload
-    // })
-    // builder.addMatcher(moderationApi.endpoints.changePostStatusById.matchFulfilled, (state, { payload }) => {
-    //   console.log('payload', payload)
-    // })
+    builder.addMatcher(categoriesApi.endpoints.getCategoryById.matchFulfilled, (state, { payload }) => {
+      console.log('payload', payload)
+      state.category = payload
+    })
+    builder.addMatcher(categoriesApi.endpoints.updateCategory.matchFulfilled, (state, { payload }) => {
+      console.log('payload', payload)
+    })
+    builder.addMatcher(categoriesApi.endpoints.deleteCategory.matchFulfilled, (state, { payload }) => {
+      console.log('payload', payload)
+    })
+    builder.addMatcher(categoriesApi.endpoints.createCategory.matchFulfilled, (state, { payload }) => {
+      console.log('payload', payload)
+    })
 
     //REJECTED MATCHERS
-    // builder.addMatcher(moderationApi.endpoints.getPosts.matchRejected, (state, { error }) => {
-    //   console.error('Error loading users:', error)
-    //   state.posts = []
-    // })
+    builder.addMatcher(categoriesApi.endpoints.getCategories.matchRejected, (state, { payload }) => {
+      console.error('Error loading users:', payload)
+    })
+    builder.addMatcher(categoriesApi.endpoints.getCategoryById.matchRejected, (state, { payload }) => {
+      console.error('Error loading user:', payload)
+    })
+    builder.addMatcher(categoriesApi.endpoints.updateCategory.matchRejected, (state, { payload }) => {
+      console.error('Error updating user:', payload)
+    })
+    builder.addMatcher(categoriesApi.endpoints.deleteCategory.matchRejected, (state, { payload }) => {
+      console.error('Error deleting user:', payload)
+    })
+    builder.addMatcher(categoriesApi.endpoints.createCategory.matchRejected, (state, { payload }) => {
+      console.error('Error creating user:', payload)
+    })
   }
 })
 

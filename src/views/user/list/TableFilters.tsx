@@ -20,7 +20,7 @@ const TableFilters = ({ setData, tableData }: { setData: (data: any[]) => void; 
   useEffect(() => {
     const filteredData = tableData?.filter(user => {
       if (role && user.role !== role) return false
-      if (plan && user.currentPlan !== plan) return false
+      if (plan && user.subscriptionType !== plan) return false
       if (status && user.status !== status) return false
       if (memory && user.memoryStatus !== memory) return false
 
@@ -47,9 +47,9 @@ const TableFilters = ({ setData, tableData }: { setData: (data: any[]) => void; 
             SelectProps={{ displayEmpty: true }}
           >
             <MenuItem value=''>All Plans</MenuItem>
-            <MenuItem value='Moments'>Moments</MenuItem>
-            <MenuItem value='Moments Deluxe (Monthly)'>Moments Deluxe (Monthly)</MenuItem>
-            <MenuItem value='Moments Deluxe (Annual)'>Moments Deluxe (Annual)</MenuItem>
+            <MenuItem value='free'>Moments</MenuItem>
+            <MenuItem value='monthly'>Moments Deluxe (Monthly)</MenuItem>
+            <MenuItem value='annual'>Moments Deluxe (Annual)</MenuItem>
           </CustomTextField>
         </Grid>
         <Grid item xs={12} sm={3}>

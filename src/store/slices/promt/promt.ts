@@ -57,6 +57,22 @@ const promtSlice = createSlice({
         }
       }
     )
+
+    // REJECTED MATCHERS
+    builder.addMatcher(promptApi.endpoints.getAiPromts.matchRejected, (state, { error }) => {
+      console.error('Error loading promts:', error)
+      state.promts = []
+    })
+    builder.addMatcher(promptApi.endpoints.getAiPromtsByType.matchRejected, (state, { error }) => {
+      console.error('Error loading promts:', error)
+      state.promt = null
+    })
+    builder.addMatcher(promptApi.endpoints.updateAiPromts.matchRejected, (state, { error }) => {
+      console.error('Error updating promts:', error)
+    })
+    builder.addMatcher(promptApi.endpoints.deleteAiPromts.matchRejected, (state, { error }) => {
+      console.error('Error deleting promts:', error)
+    })
   }
 })
 

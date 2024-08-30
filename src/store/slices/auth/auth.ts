@@ -34,6 +34,7 @@ const authSlice = createSlice({
   reducers: {
     logout: state => {
       deleteCookie('auth_token')
+      localStorage.removeItem('user')
 
       //? clear the auth slice data
       state.user = null
@@ -49,13 +50,12 @@ const authSlice = createSlice({
         //? store the user data in the store
         //? "mutation" also works
         setAuthCookie(payload.token, 'auth_token')
+        localStorage.setItem('user', JSON.stringify(payload.user))
         state.user = payload.user
         state.token = payload.token
       })
       .addMatcher(authApi.endpoints.getAuthStatus.matchFulfilled, (state, { payload }) => {
         //? in case we receive a new token when refetching the details
-        console.log('payload', payload)
-
         // setAuthCookie(payload.token, 'auth_token')
         // state.user = payload.user
         // state.token = payload.token
@@ -64,6 +64,7 @@ const authSlice = createSlice({
       //REJECTED MATCHERS
       .addMatcher(authApi.endpoints.login.matchRejected, (state, { error }) => {
         console.error('Login failed:', error)
+        console.log('error', error)
       })
       .addMatcher(authApi.endpoints.getAuthStatus.matchRejected, (state, { error }) => {
         console.error('Get auth status failed:', error)

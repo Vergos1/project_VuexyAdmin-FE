@@ -2,7 +2,7 @@
 
 // React Imports
 import type { ReactNode } from 'react'
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 
 // Next Imports
 // import Link from 'next/link'
@@ -62,6 +62,11 @@ import OpenDialogOnElementClick from '@/components/dialogs/OpenDialogOnElementCl
 import AddNewCategory from '@/components/dialogs/add-edit-category'
 import ActionModal from '@/components/dialogs/action-modal'
 import { setSelectedCategory } from '@/store/slices/categories/categories'
+import {
+  useCreateCategoryMutation,
+  useDeleteCategoryMutation,
+  useUpdateCategoryMutation
+} from '@/store/slices/categories/categoriesApi'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -107,10 +112,51 @@ const CategoryListTable = ({ tableData }: { tableData?: any[] }) => {
 
   // States
   //   const [addUserOpen, setAddUserOpen] = useState(false)
+  const [data, setData] = useState(...[tableData])
   const [rowSelection, setRowSelection] = useState({})
 
   // const [data, setData] = useState(...[tableData]);
   const [globalFilter, setGlobalFilter] = useState('')
+
+  const [updateCategory] = useUpdateCategoryMutation()
+  const [deleteCategory] = useDeleteCategoryMutation()
+  const [createCategory] = useCreateCategoryMutation()
+
+  useEffect(() => {
+    setData(...[tableData])
+  }, [tableData])
+
+  const handleUpdateCategory = async (id: string, name: string, parentCategoryId?: string) => {
+    try {
+      const response = await updateCategory({ id, name, parentCategoryId }).unwrap()
+
+      console.log('Category updated successfully:', response)
+    } catch (error) {
+      console.error('Failed to update category:', error)
+    }
+  }
+
+  const handleDeleteCategory = async (id: string) => {
+    console.log('handleDeleteCategory', id)
+
+    try {
+      const response = await deleteCategory({ id }).unwrap()
+
+      console.log('Category deleted successfully:', response)
+    } catch (error) {
+      console.error('Failed to delete category:', error)
+    }
+  }
+
+  const handleCreateCategory = async (categoryName: string = 'New Category', parentCategoryId?: string) => {
+    try {
+      const response = await createCategory({ name: categoryName, parentCategoryId }).unwrap()
+
+      console.log('Category created successfully:', response)
+    } catch (error) {
+      console.error('Failed to create category:', error)
+    }
+  }
 
   const columns = useMemo<ColumnDef<UsersTypeWithAction, any>[]>(
     () => [
@@ -124,7 +170,7 @@ const CategoryListTable = ({ tableData }: { tableData?: any[] }) => {
       }),
       columnHelper.accessor('action', {
         header: '',
-        cell: ({}) => (
+        cell: ({ row }) => (
           <div onClick={e => e.stopPropagation()} className='flex items-center justify-end gap-2 pr-[30px]'>
             <OpenDialogOnElementClick
               element={IconButton}
@@ -134,7 +180,7 @@ const CategoryListTable = ({ tableData }: { tableData?: any[] }) => {
                 title: 'Edit Category',
                 inputLabel: 'Сategory name',
                 placeholder: 'Edit category',
-                onSubmit: (value: string) => console.log(value)
+                onSubmit: (name: string) => handleUpdateCategory(row.original.id, name, row.original.parentCategoryId)
               }}
             />
             <OpenDialogOnElementClick
@@ -144,7 +190,7 @@ const CategoryListTable = ({ tableData }: { tableData?: any[] }) => {
               dialogProps={{
                 title: 'Delete an item?',
                 text: "Are you sure you want to delete this item? You can't undo this action.",
-                onSubmit: (value: string) => console.log(value),
+                onSubmit: () => handleDeleteCategory(row.original.id),
                 actionText: 'Delete'
               }}
             />
@@ -153,11 +199,11 @@ const CategoryListTable = ({ tableData }: { tableData?: any[] }) => {
       })
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [tableData]
+    [tableData, data]
   )
 
   const table = useReactTable({
-    data: tableData || ([] as any[]),
+    data: data || ([] as any[]),
     columns: columns,
     filterFns: {
       fuzzy: fuzzyFilter
@@ -221,7 +267,7 @@ const CategoryListTable = ({ tableData }: { tableData?: any[] }) => {
                 title: 'Add New Category',
                 inputLabel: 'Category Name',
                 placeholder: 'Name',
-                onSubmit: (value: string) => console.log(value)
+                onSubmit: (name: string) => handleCreateCategory(name)
               }}
             />
           </div>

@@ -15,6 +15,8 @@ import { useGetUsersQuery } from '@/store/slices/userManagement/userManagementAp
 const UserListApp = () => {
   const { data, isLoading } = useGetUsersQuery([])
 
+  console.log('data', data)
+
   return <UserList isLoading={isLoading} userData={data?.data || []} meta={data?.meta || {}} />
 }
 

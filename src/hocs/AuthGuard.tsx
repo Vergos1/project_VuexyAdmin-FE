@@ -37,11 +37,9 @@ export const AuthGuard = ({ children }: Props) => {
     }
   )
 
-  console.log('error', error)
-
   //? if the user does not have a valid token, redirect to login page
   useEffect(() => {
-    if (!token || (error && 'status' in error && error.status === 401)) {
+    if (!token || error) {
       dispatch(logout())
       push(`/login?redirectFrom=${pathname}`)
     }

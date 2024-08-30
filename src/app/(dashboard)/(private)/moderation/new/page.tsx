@@ -1,7 +1,9 @@
+'use client'
 import React from 'react'
 
 import PostListTable from '@/views/moderation/PostListTable'
 import ModerationTabs from '@/views/moderation/Tabs'
+import { useGetPostsQuery } from '@/store/slices/moderation/moderationApi'
 
 const mockData = [
   {
@@ -61,10 +63,12 @@ const mockData = [
 ]
 
 export default function Page() {
+  const { data, isLoading } = useGetPostsQuery([])
+
   return (
     <div className='flex flex-col gap-6'>
       <ModerationTabs />
-      <PostListTable tableData={mockData} tableType='new' />
+      <PostListTable tableData={data?.data || []} tableType='new' />
     </div>
   )
 }
