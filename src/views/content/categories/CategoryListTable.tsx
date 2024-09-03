@@ -178,8 +178,8 @@ const CategoryListTable = ({ tableData }: { tableData?: any[] }) => {
               dialog={AddNewCategory}
               dialogProps={{
                 title: 'Edit Category',
-                inputLabel: 'Сategory name',
-                placeholder: 'Edit category',
+                inputLabel: 'Category name',
+                placeholder: row.original.name || 'Edit category',
                 onSubmit: (name: string) => handleUpdateCategory(row.original.id, name, row.original.parentCategoryId)
               }}
             />
@@ -190,7 +190,9 @@ const CategoryListTable = ({ tableData }: { tableData?: any[] }) => {
               dialogProps={{
                 title: 'Delete an item?',
                 text: "Are you sure you want to delete this item? You can't undo this action.",
-                onSubmit: () => handleDeleteCategory(row.original.id),
+                onSubmit: () => {
+                  handleDeleteCategory(row.original.id)
+                },
                 actionText: 'Delete'
               }}
             />

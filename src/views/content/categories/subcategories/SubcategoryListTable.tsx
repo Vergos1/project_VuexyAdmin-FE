@@ -3,7 +3,7 @@
 // React Imports
 
 import type { ReactNode } from 'react'
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 
 // Next Imports
 // import Link from 'next/link'
@@ -65,6 +65,12 @@ import AddNewCategory from '@/components/dialogs/add-edit-category'
 import ActionModal from '@/components/dialogs/action-modal'
 import { setSelectedCategory, setSelectedSubcategory } from '@/store/slices/categories/categories'
 
+import {
+  useCreateCategoryMutation,
+  useDeleteCategoryMutation,
+  useUpdateCategoryMutation
+} from '@/store/slices/categories/categoriesApi'
+
 declare module '@tanstack/table-core' {
   interface FilterFns {
     fuzzy: FilterFn<unknown>
@@ -102,7 +108,17 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
 // Column Definitions
 const columnHelper = createColumnHelper<UsersTypeWithAction>()
 
-const SubcategoryListTable = ({ title, tableData }: { title: string; tableData?: any[] }) => {
+const SubcategoryListTable = ({
+  title,
+  tableData,
+  parentCategoryId,
+  onRefresh
+}: {
+  title: string
+  tableData: any[] | undefined
+  parentCategoryId?: string
+  onRefresh?: () => void
+}) => {
   //Init
   const router = useRouter()
   const pathname = usePathname()
@@ -110,8 +126,57 @@ const SubcategoryListTable = ({ title, tableData }: { title: string; tableData?:
 
   // States
   const [rowSelection, setRowSelection] = useState({})
-  const [data, setData] = useState(...[tableData])
+  const [data, setData] = useState(tableData || [])
   const [globalFilter, setGlobalFilter] = useState('')
+
+  const [updateCategory] = useUpdateCategoryMutation()
+  const [deleteCategory] = useDeleteCategoryMutation()
+  const [createCategory] = useCreateCategoryMutation()
+
+  useEffect(() => {
+    if (tableData) {
+      console.log('tableData', tableData)
+      setData(...[tableData])
+    }
+  }, [tableData])
+
+  const handleUpdateSubcategory = async (id: string, name: string, parentCategoryId?: string) => {
+    try {
+      const response = await updateCategory({ id, name, parentCategoryId }).unwrap()
+
+      onRefresh && onRefresh()
+
+      console.log('Category updated successfully:', response)
+    } catch (error) {
+      console.error('Failed to update category:', error)
+    }
+  }
+
+  const handleDeleteSubcategory = async (id: string) => {
+    console.log('handleDeleteCategory', id)
+
+    try {
+      const response = await deleteCategory({ id }).unwrap()
+
+      onRefresh && onRefresh()
+
+      console.log('Category deleted successfully:', response)
+    } catch (error) {
+      console.error('Failed to delete category:', error)
+    }
+  }
+
+  const handleCreateSubcategory = async (categoryName: string = 'New Category', parentCategoryId?: string) => {
+    try {
+      const response = await createCategory({ name: categoryName, parentCategoryId }).unwrap()
+
+      onRefresh && onRefresh()
+
+      console.log('Category created successfully:', response)
+    } catch (error) {
+      console.error('Failed to create category:', error)
+    }
+  }
 
   const columns = useMemo<ColumnDef<UsersTypeWithAction, any>[]>(
     () => [
@@ -125,7 +190,7 @@ const SubcategoryListTable = ({ title, tableData }: { title: string; tableData?:
       }),
       columnHelper.accessor('action', {
         header: '',
-        cell: ({}) => (
+        cell: ({ row }) => (
           <div onClick={e => e.stopPropagation()} className='flex items-center justify-end gap-2 pr-[30px]'>
             <OpenDialogOnElementClick
               element={IconButton}
@@ -134,8 +199,8 @@ const SubcategoryListTable = ({ title, tableData }: { title: string; tableData?:
               dialogProps={{
                 title: 'Edit Subcategory',
                 inputLabel: 'Subcategory name',
-                placeholder: 'Edit subcategory',
-                onSubmit: (value: string) => console.log(value)
+                placeholder: row.original.name || 'Edit subcategory',
+                onSubmit: (name: string) => handleUpdateSubcategory(row.original.id, name, parentCategoryId)
               }}
             />
             <OpenDialogOnElementClick
@@ -145,7 +210,9 @@ const SubcategoryListTable = ({ title, tableData }: { title: string; tableData?:
               dialogProps={{
                 title: 'Delete an item?',
                 text: "Are you sure you want to delete this item? You can't undo this action.",
-                onSubmit: (value: string) => console.log(value),
+                onSubmit: () => {
+                  handleDeleteSubcategory(row.original.id)
+                },
                 actionText: 'Delete'
               }}
             />
@@ -158,7 +225,7 @@ const SubcategoryListTable = ({ title, tableData }: { title: string; tableData?:
   )
 
   const table = useReactTable({
-    data: data as any[],
+    data: data ?? [],
     columns: columns,
     filterFns: {
       fuzzy: fuzzyFilter
@@ -214,7 +281,7 @@ const SubcategoryListTable = ({ title, tableData }: { title: string; tableData?:
                 title: 'Add New Subcategory',
                 inputLabel: 'Subcategory name',
                 placeholder: 'Name',
-                onSubmit: (value: string) => console.log(value)
+                onSubmit: (name: string) => handleCreateSubcategory(name, parentCategoryId)
               }}
             />
           </div>

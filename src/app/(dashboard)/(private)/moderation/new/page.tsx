@@ -65,6 +65,8 @@ const mockData = [
 export default function Page() {
   const { data, isLoading } = useGetPostsQuery([])
 
+  console.log('data', data)
+
   return (
     <div className='flex flex-col gap-6'>
       <ModerationTabs />

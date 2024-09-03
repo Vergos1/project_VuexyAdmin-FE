@@ -1,7 +1,7 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import React from 'react'
+import React, { useState } from 'react'
 
 import Image from 'next/image'
 
@@ -33,6 +33,17 @@ const images = [
 
 const UserPost = () => {
   const router = useRouter()
+
+  const [status, setStatus] = useState<'active' | 'blocked'>('blocked')
+  const [userStatus, setUserStatus] = useState<'active' | 'blocked'>('blocked')
+
+  const handleChangeUserStatus = () => {
+    setUserStatus(userStatus === 'active' ? 'blocked' : 'active')
+  }
+
+  const handleChangeStatus = () => {
+    setStatus(status === 'active' ? 'blocked' : 'active')
+  }
 
   return (
     <div className='flex flex-col gap-6'>
@@ -97,17 +108,40 @@ const UserPost = () => {
           </div>
         </CardContent>
         <CardActions className='flex justify-end'>
-          <Button variant='outlined'>Reviewed</Button>
-
           <OpenDialogOnElementClick
             element={Button}
-            elementProps={buttonProps('Block', 'error', 'contained')}
+            elementProps={
+              status === 'blocked'
+                ? buttonProps('Unblock Post', 'error', 'outlined')
+                : buttonProps('Block Post', 'error', 'outlined')
+            }
             dialog={ActionModal}
             dialogProps={{
-              title: 'Confirm post blocking',
-              text: 'Are you sure you want to block this post? Once blocked, the post will become inaccessible to users.',
-              onSubmit: () => {},
-              actionText: 'Block'
+              title: status === 'blocked' ? 'Confirm post unblocking' : 'Confirm post blocking',
+              text:
+                status === 'blocked'
+                  ? 'Are you sure you want to unblock this post?'
+                  : 'Are you sure you want to block this post?',
+              onSubmit: handleChangeStatus,
+              actionText: status === 'blocked' ? 'Unblock' : 'Block'
+            }}
+          />
+          <OpenDialogOnElementClick
+            element={Button}
+            elementProps={
+              userStatus === 'blocked'
+                ? buttonProps('Unblock User', 'error', 'contained')
+                : buttonProps('Block User', 'error', 'contained')
+            }
+            dialog={ActionModal}
+            dialogProps={{
+              title: userStatus === 'blocked' ? 'Confirm user unblocking' : 'Confirm user blocking',
+              text:
+                status === 'blocked'
+                  ? 'Are you sure you want to unblock user?'
+                  : 'Are you sure you want to block user?',
+              onSubmit: handleChangeUserStatus,
+              actionText: userStatus === 'blocked' ? 'Unblock' : 'Block'
             }}
           />
         </CardActions>

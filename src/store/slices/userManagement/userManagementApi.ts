@@ -15,9 +15,17 @@ export const userManagementApi = createApi({
   tagTypes: ['User'],
   endpoints: builder => ({
     getUsers: builder.query({
-      query: () => ({
+      query: ({ page, limit, search, subscriptionType, categories, status }) => ({
         url: 'users',
-        method: 'GET'
+        method: 'GET',
+        params: {
+          page,
+          limit,
+          search,
+          subscriptionType,
+          categories,
+          status
+        }
       }),
       providesTags: ['User'],
       transformResponse: (response: UsersResponse) => ({

@@ -24,7 +24,7 @@ import classnames from 'classnames'
 
 import { useForm } from 'react-hook-form'
 
-import type { FieldValues, SubmitHandler } from 'react-hook-form'
+import type { FieldErrors, FieldValues, SubmitHandler } from 'react-hook-form'
 
 // Type Imports
 import type { SystemMode } from '@core/types'
@@ -113,6 +113,10 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
     return <Preloader />
   }
 
+  const getErrorProps = (field: keyof FieldErrors) => {
+    return errors[field] ? { error: true, helperText: 'This field is required' } : {}
+  }
+
   return (
     <div className='flex bs-full justify-center'>
       <div className='flex justify-center items-center bs-full !min-is-full p-6 md:!min-is-[unset] md:p-12 md:is-[520px] overflow-hidden sm:overflow-visible'>
@@ -132,8 +136,10 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
               autoFocus
               fullWidth
               label='Email'
+              error={!!errors.email || !!result.error}
               placeholder='Enter your email'
               {...register('email', { required: true })}
+              {...getErrorProps('email')}
             />
             <CustomTextField
               fullWidth
@@ -141,7 +147,9 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
               placeholder='············'
               id='outlined-adornment-password'
               type={isPasswordShown ? 'text' : 'password'}
+              error={!!errors.password || !!result.error}
               {...register('password', { required: true })}
+              {...getErrorProps('password')}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position='end'>
@@ -161,12 +169,12 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
             <Button fullWidth variant='contained' type='submit'>
               Login
             </Button>
-            <div className='flex justify-center items-center flex-wrap gap-2'>
+            {/* <div className='flex justify-center items-center flex-wrap gap-2'>
               <Typography>New on our platform?</Typography>
               <Typography component={Link} color='primary'>
                 Create an account
               </Typography>
-            </div>
+            </div> */}
           </form>
         </div>
       </div>

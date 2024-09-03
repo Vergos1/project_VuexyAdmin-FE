@@ -35,6 +35,7 @@ const ActionModal = ({
   cancelText = 'Close'
 }: ActionModalProps) => {
   const handleSubmit = (e: React.FormEvent) => {
+    onSubmit((e.target as HTMLFormElement).value)
     e.preventDefault()
     setOpen(false)
   }
@@ -68,7 +69,7 @@ const ActionModal = ({
           >
             {cancelText}
           </Button>
-          <Button variant='contained' type='submit'>
+          <Button variant='contained' onSubmit={handleSubmit} type='submit'>
             {actionText}
           </Button>
         </DialogActions>

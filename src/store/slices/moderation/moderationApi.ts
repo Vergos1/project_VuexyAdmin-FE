@@ -5,27 +5,26 @@ import { baseQuery } from '../baseQuery'
 export const moderationApi = createApi({
   reducerPath: 'moderationApi',
   baseQuery,
-  tagTypes: ['Post'],
+  tagTypes: ['memories'],
   endpoints: builder => ({
     getPosts: builder.query({
       query: () => ({
-        url: 'posts',
+        url: 'memories',
         method: 'GET'
-      }),
-      providesTags: ['Post']
+      })
     }),
     getPostInfoById: builder.query({
       query: (id: string) => ({
-        url: `post/${id}`,
+        url: `memories/${id}`,
         method: 'GET'
       })
     }),
     changePostStatusById: builder.mutation({
       query: (id: string) => ({
-        url: `post/status/${id}`,
+        url: `memories/status/${id}`,
         method: 'POST'
       }),
-      invalidatesTags: ['Post']
+      invalidatesTags: ['memories']
     })
   })
 })
