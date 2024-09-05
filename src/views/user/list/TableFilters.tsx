@@ -8,31 +8,60 @@ import MenuItem from '@mui/material/MenuItem'
 
 // Component Imports
 import CustomTextField from '@core/components/mui/TextField'
+import { useLazyGetUsersQuery } from '@/store/slices/userManagement/userManagementApi'
+import { useGetCategoriesQuery } from '@/store/slices/categories/categoriesApi'
 
-const TableFilters = ({ setData, tableData }: { setData: (data: any[]) => void; tableData?: any[] }) => {
+const TableFilters = ({ setData, setFilters }: { setData: (data: any[]) => void; setFilters: any }) => {
   // States
-  const [role, setRole] = useState<any['role']>('')
   const [category, setCategory] = useState<any['category']>([])
-  const [plan, setPlan] = useState<any['currentPlan']>('')
+  const [subscriptionType, setSubscriptionType] = useState<any['currentPlan']>('')
   const [status, setStatus] = useState<any['status']>('')
-  const [memory, setMemory] = useState<any['memoryStatus']>('')
+  const [favoritesFilter, setFavoritesFilter] = useState<any>('')
+  const [triggerGetUsers, { data, isFetching, error }] = useLazyGetUsersQuery()
+  const { data: categories, isLoading } = useGetCategoriesQuery()
+
+  console.log(categories)
 
   useEffect(() => {
-    const filteredData = tableData?.filter(user => {
-      if (role && user.role !== role) return false
-      if (plan && user.subscriptionType !== plan) return false
-      if (status && user.status !== status) return false
-      if (memory && user.memoryStatus !== memory) return false
-
-      if (category.length && !category.includes('')) {
-        if (!category.includes(user.category)) return false
+    const fetchUsers = async () => {
+      try {
+        await triggerGetUsers({
+          page: 1, //? можна використовувати зберігання стану для пагінації
+          limit: 10, //? кількість записів на сторінці
+          subscriptionType,
+          favoritesFilter,
+          categories: category,
+          status
+        }).unwrap()
+      } catch (error) {
+        console.error('Error fetching users:', error)
       }
+    }
+
+    fetchUsers()
+  }, [subscriptionType, status, category, favoritesFilter, triggerGetUsers])
+
+  //? Фільтрування даних на основі таблиці даних та обраних фільтрів
+  useEffect(() => {
+    const users = data && 'data' in data ? data.data : []
+
+    const filteredData = users?.filter(() => {
+      if (subscriptionType !== subscriptionType) return false
+      if (status !== status) return false
+      if (favoritesFilter !== favoritesFilter) return false
 
       return true
     })
 
+    setFilters({
+      subscriptionType,
+      status,
+      category,
+      favoritesFilter
+    })
+
     setData(filteredData || [])
-  }, [role, plan, status, memory, tableData, setData])
+  }, [data, subscriptionType, status, favoritesFilter, category, setData])
 
   return (
     <CardContent>
@@ -42,8 +71,8 @@ const TableFilters = ({ setData, tableData }: { setData: (data: any[]) => void; 
             select
             fullWidth
             id='select-plan'
-            value={plan}
-            onChange={e => setPlan(e.target.value)}
+            value={subscriptionType}
+            onChange={e => setSubscriptionType(e.target.value)}
             SelectProps={{ displayEmpty: true }}
           >
             <MenuItem value=''>All Plans</MenuItem>
@@ -67,43 +96,32 @@ const TableFilters = ({ setData, tableData }: { setData: (data: any[]) => void; 
             <MenuItem value='blocked'>Blocked</MenuItem>
           </CustomTextField>
         </Grid>
-        {/*//? Roles filters
-         <Grid item xs={12} sm={3}>
-          <CustomTextField
-            select
-            fullWidth
-            id='select-role'
-            value={role}
-            onChange={e => setRole(e.target.value)}
-            SelectProps={{ displayEmpty: true }}
-          >
-            <MenuItem value=''>All Roles</MenuItem>
-            <MenuItem value='admin'>Admin</MenuItem>
-            <MenuItem value='user'>User</MenuItem>
-          </CustomTextField>
-        </Grid> */}
         <Grid item xs={12} sm={3}>
           <CustomTextField
             select
             fullWidth
             id='select-category'
-            value={category.length ? category : ['']}
+            value={category.length > 0 ? category : ['']}
             placeholder='All Category'
             onChange={e => setCategory(e.target.value)}
-            SelectProps={{ multiple: true }}
+            SelectProps={{
+              multiple: true,
+              MenuProps: {
+                PaperProps: {
+                  style: {
+                    maxHeight: 200 //? Set the maximum height here
+                  }
+                }
+              }
+            }}
           >
             <MenuItem value=''>All Category</MenuItem>
-            <MenuItem value='animals'>Animals</MenuItem>
-            <MenuItem value='books'>Books</MenuItem>
-            <MenuItem value='career'>Career & Service</MenuItem>
-            <MenuItem value='family'>Family</MenuItem>
-            <MenuItem value='food'>Food</MenuItem>
-            <MenuItem value='friend'>Friend</MenuItem>
-            <MenuItem value='fun'>Fun</MenuItem>
-            <MenuItem value='health'>Health</MenuItem>
-            <MenuItem value='hobbies'>Hobbies</MenuItem>
-            <MenuItem value='personal'>Personal Growth</MenuItem>
-            <MenuItem value='quotes'>Quotes</MenuItem>
+            {categories &&
+              categories.map((category: any) => (
+                <MenuItem key={category.id} value={category.name}>
+                  {category.name}
+                </MenuItem>
+              ))}
           </CustomTextField>
         </Grid>
         <Grid item xs={12} sm={3}>
@@ -111,13 +129,13 @@ const TableFilters = ({ setData, tableData }: { setData: (data: any[]) => void; 
             select
             fullWidth
             id='select-memory'
-            value={memory}
-            onChange={e => setMemory(e.target.value)}
+            value={favoritesFilter}
+            onChange={e => setFavoritesFilter(e.target.value)}
             SelectProps={{ displayEmpty: true }}
           >
             <MenuItem value=''>All Memory Status</MenuItem>
-            <MenuItem value='added'>Memory added to Favorite</MenuItem>
-            <MenuItem value='no-added'>No memories added</MenuItem>
+            <MenuItem value='include'>Memory added to Favorite</MenuItem>
+            <MenuItem value='empty'>No memories added</MenuItem>
           </CustomTextField>
         </Grid>
       </Grid>

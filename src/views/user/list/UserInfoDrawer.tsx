@@ -31,7 +31,7 @@ type Props = {
   open: boolean
   handleClose: () => void
   userData: UserType
-  setData: (data: any[]) => void
+  setData?: (data: any[]) => void
 
   //   setData: (data: UsersType[]) => void
 }

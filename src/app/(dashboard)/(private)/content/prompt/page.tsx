@@ -57,12 +57,6 @@ const Page = () => {
     }
   }, [isDirty])
 
-  console.log('data', aiPromtsAllList)
-
-  console.log('data tags', aiPromtsTags)
-
-  console.log('data text', aiPromtsText)
-
   const onSubmit = async (data: any) => {
     try {
       if (aiPromtsTags?.prompt) {

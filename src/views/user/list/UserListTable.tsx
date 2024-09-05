@@ -58,7 +58,9 @@ import tableStyles from '@core/styles/table.module.css'
 import { getFullName } from '@/utils/getFullName'
 import {
   useChangeUserStatusByIdMutation,
-  useLazyGetUserInfoByIdQuery
+  useGetUsersListCSVQuery,
+  useLazyGetUserInfoByIdQuery,
+  useLazyGetUsersQuery
 } from '@/store/slices/userManagement/userManagementApi'
 import { getAvatar } from '@/utils/getAvatar'
 import type { MetaType, UsersListType } from '@/types/userTypes'
@@ -160,13 +162,39 @@ const UserListTable = ({ tableData, meta }: UsersListTableProps) => {
   const [data, setData] = useState(...[tableData])
   const [filteredData, setFilteredData] = useState(data)
   const [globalFilter, setGlobalFilter] = useState('')
+  const [category, setCategory] = useState<any['category']>([])
+  const [subscriptionType, setSubscriptionType] = useState<any['currentPlan']>('')
+  const [status, setStatus] = useState<any['status']>('')
+  const [favoritesFilter, setFavoritesFilter] = useState<any>('')
+
+  const [filters, setFilters] = useState({
+    subscriptionType: '',
+    status: '',
+    category: [],
+    favoritesFilter: ''
+  })
+
+  //   const [filters, setFilters] = useState({
+  //     page: 1,
+  //     limit: 10,
+  //     subscriptionType: subscriptionType,
+  //     favoritesFilter: favoritesFilter,
+  //     categories: category,
+  //     status: status
+  //   })
+
+  // Queries
+  const [getUserInfoById, { data: userInfo, isLoading: isUserInfoLoading }] = useLazyGetUserInfoByIdQuery()
+  const [getUsers, { isLoading: isUsersLoading }] = useLazyGetUsersQuery()
+  const [changeUserStatusById] = useChangeUserStatusByIdMutation()
+  const { data: csvData, error: csvError } = useGetUsersListCSVQuery(filters)
 
   useEffect(() => {
     setData(...[tableData])
   }, [tableData])
 
-  const [getUserInfoById, { data: userInfo, isLoading: isUserInfoLoading }] = useLazyGetUserInfoByIdQuery()
-  const [changeUserStatusById] = useChangeUserStatusByIdMutation()
+  // Handlers
+  const csvUrl = csvData ? URL.createObjectURL(new Blob([csvData], { type: 'text/csv' })) : ''
 
   const handleChangeUserStatus = async (id: string) => {
     try {
@@ -296,7 +324,7 @@ const UserListTable = ({ tableData, meta }: UsersListTableProps) => {
   )
 
   const table = useReactTable({
-    data: filteredData as any[],
+    data: filteredData,
     columns,
     filterFns: {
       fuzzy: fuzzyFilter
@@ -328,7 +356,7 @@ const UserListTable = ({ tableData, meta }: UsersListTableProps) => {
     <>
       <Card>
         <CardHeader title='User List' className='pbe-4' />
-        <TableFilters setData={setFilteredData} tableData={data} />
+        <TableFilters setData={setFilteredData} setFilters={setFilters} />
         <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4'>
           <CustomTextField
             select
@@ -352,6 +380,10 @@ const UserListTable = ({ tableData, meta }: UsersListTableProps) => {
               variant='tonal'
               startIcon={<i className='tabler-upload' />}
               className='max-sm:is-full'
+              component='a'
+              href={csvUrl}
+              download='users.csv'
+              disabled={!csvData}
             >
               Export to CSV
             </Button>
