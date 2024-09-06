@@ -8,20 +8,21 @@ export const moderationApi = createApi({
   tagTypes: ['memories'],
   endpoints: builder => ({
     getPosts: builder.query({
-      query: () => ({
+      query: ({ listType, limit = 10, page = 1 }) => ({
         url: 'memories',
-        method: 'GET'
+        method: 'GET',
+        params: { listType, limit, page }
       })
     }),
     getPostInfoById: builder.query({
-      query: (id: string) => ({
-        url: `memories/${id}`,
+      query: (postId: string) => ({
+        url: `memories/${postId}`,
         method: 'GET'
       })
     }),
     changePostStatusById: builder.mutation({
-      query: (id: string) => ({
-        url: `memories/status/${id}`,
+      query: (postId: string) => ({
+        url: `memories/status/${postId}`,
         method: 'POST'
       }),
       invalidatesTags: ['memories']
@@ -29,4 +30,9 @@ export const moderationApi = createApi({
   })
 })
 
-export const { useGetPostsQuery, useLazyGetPostInfoByIdQuery, useChangePostStatusByIdMutation } = moderationApi
+export const {
+  useGetPostsQuery,
+  useGetPostInfoByIdQuery,
+  useChangePostStatusByIdMutation,
+  useLazyGetPostInfoByIdQuery
+} = moderationApi

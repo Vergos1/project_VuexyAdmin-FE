@@ -23,7 +23,6 @@ export const userManagementApi = createApi({
           search,
           ...(subscriptionType && { subscriptionType }),
           ...(favoritesFilter && { favoritesFilter }),
-          ...(categories && categories.length > 0 && { categories }),
           ...(status && { status })
         }
 
@@ -54,8 +53,7 @@ export const userManagementApi = createApi({
           search,
           ...(subscriptionType && { subscriptionType }),
           ...(favoritesFilter && { favoritesFilter }),
-          ...(status && { status }),
-          ...(categories && categories.length > 0 && { categories })
+          ...(status && { status })
         }
 
         return {

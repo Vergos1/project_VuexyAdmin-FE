@@ -116,7 +116,7 @@ const PostListTable = ({ tableData, tableType = 'new' }: { tableData?: any[]; ta
         header: 'Post',
         cell: ({ row }) => (
           <div className='flex items-center gap-2'>
-            <Link underline='hover' href={`/moderation/${tableType}/${row.original.id}`}>
+            <Link underline='hover' href={`/moderation/${tableType}?postId=${row.original.id}`}>
               View post
             </Link>
           </div>

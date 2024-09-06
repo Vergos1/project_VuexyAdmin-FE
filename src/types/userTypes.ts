@@ -1,7 +1,7 @@
-export enum PlansEnum {
-  MOMENTS = 'Moments',
-  MOMENTS_DELUXE_MONTHLY = 'Moments Deluxe (Monthly)',
-  MOMENTS_DELUXE_ANNUAL = 'Moments Deluxe (Annual)'
+export enum SubscriptionType {
+  Free = 'free',
+  Monthly = 'Moments Deluxe (Monthly)',
+  Annual = 'Moments Deluxe (Annual)'
 }
 
 export enum UserStatusEnum {
@@ -42,19 +42,25 @@ export interface UsersListType {
   subscriptionType: string
   status: UserStatusEnum
 }
+
+export interface CategoryType {
+  id: string
+  name: string
+}
+
 export interface UserType {
   birthDate: string
-  categories: string[]
+  categories: CategoryType[]
   trustedAccount: TrustedAccountType
   dependentAccount: string[]
   email: string
   firstName: string
   id: string
   lastName: string
-  plan: PlansEnum
-  questionsAmount: number
+  subscriptionType: SubscriptionType
+  questionsCount: number
   status: UserStatusEnum
-  voiceRecordsLength: number
+  totalAudioDuration: number
 }
 
 export interface MetaType {

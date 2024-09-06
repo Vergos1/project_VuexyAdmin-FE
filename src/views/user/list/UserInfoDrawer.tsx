@@ -23,6 +23,7 @@ import { getFullName } from '@/utils/getFullName'
 import { getFormattedDate } from '@/utils/getFormattedDate'
 import { getAvatar } from '@/utils/getAvatar'
 import type { UserType } from '@/types/userTypes'
+import { subscriptionViewGenerator } from '@/utils/subscriptionViewGenerator'
 
 // Types Imports
 // import type { UsersType } from '@/types/apps/userTypes'
@@ -107,9 +108,11 @@ const UserInfoDrawer = ({ isLoading, open, handleClose, userData, setData }: Pro
             size: 60
           })}
       </div>
-      <DialogContent className='flex items-center min-h-[70vh] justify-center plb-6 relative'>
+      <DialogContent className={`flex items-center justify-center plb-6 relative`}>
         {isLoading ? (
-          <ComponentPreloader />
+          <div className='pb-[100px]'>
+            <ComponentPreloader />
+          </div>
         ) : (
           <Paper elevation={3} style={{ padding: '16px' }} className='br-[6px]'>
             <Grid container className='plb-6 gap-y-6' maxWidth='700px' spacing={2}>
@@ -145,21 +148,21 @@ const UserInfoDrawer = ({ isLoading, open, handleClose, userData, setData }: Pro
                 </Typography>
                 <Typography className='flex items-center mb-3'>
                   <i className='tabler-businessplan mr-[8px]' /> <strong className='mr-[12px]'>Plan:</strong>{' '}
-                  {userData?.plan ?? 'N/A'}
+                  {(userData?.subscriptionType && subscriptionViewGenerator(userData.subscriptionType)) ?? 'N/A'}
                 </Typography>
                 <Typography className='flex items-center mb-3'>
                   <i className='tabler-microphone mr-[8px]' /> <strong className='mr-[12px]'>Voice Recording:</strong>{' '}
-                  {userData?.voiceRecordsLength ?? 'N/A'} / 300 minutes
+                  {userData?.totalAudioDuration ?? 'N/A'} / 300 minutes
                 </Typography>
                 <Typography className='flex items-center mb-3'>
                   <i className='tabler-question-mark mr-[8px]' />{' '}
                   <strong className='mr-[12px]'>Inspiration Questions:</strong>
-                  {userData?.questionsAmount ?? 'N/A'}/50
+                  {userData?.questionsCount ?? 'N/A'}/50
                 </Typography>
                 <Typography className='flex items-center'>
                   <i className='tabler-question-mark mr-[8px]' /> <strong className='mr-[12px]'>Categories:</strong>{' '}
                   {userData && userData.categories.length > 0
-                    ? userData.categories.map((category, index) => <span key={index}>{category},</span>)
+                    ? userData.categories.map(category => <span key={category.id}>{category.name},</span>)
                     : 'N/A'}
                 </Typography>
               </Grid>

@@ -10,17 +10,33 @@ import MenuItem from '@mui/material/MenuItem'
 import CustomTextField from '@core/components/mui/TextField'
 import { useLazyGetUsersQuery } from '@/store/slices/userManagement/userManagementApi'
 import { useGetCategoriesQuery } from '@/store/slices/categories/categoriesApi'
+import { SubscriptionType } from '@/types/userTypes'
+
+const plansList = [
+  {
+    value: SubscriptionType.Free,
+    label: 'Moments'
+  },
+  {
+    value: SubscriptionType.Monthly,
+    label: 'Moments Deluxe (Monthly)'
+  },
+  {
+    value: SubscriptionType.Annual,
+    label: 'Moments Deluxe (Annual)'
+  }
+]
 
 const TableFilters = ({ setData, setFilters }: { setData: (data: any[]) => void; setFilters: any }) => {
   // States
   const [category, setCategory] = useState<any['category']>([])
-  const [subscriptionType, setSubscriptionType] = useState<any['currentPlan']>('')
+  const [subscriptionType, setSubscriptionType] = useState<SubscriptionType | ''>('')
   const [status, setStatus] = useState<any['status']>('')
   const [favoritesFilter, setFavoritesFilter] = useState<any>('')
   const [triggerGetUsers, { data, isFetching, error }] = useLazyGetUsersQuery()
   const { data: categories, isLoading } = useGetCategoriesQuery()
 
-  console.log(categories)
+  console.log(category)
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -72,13 +88,15 @@ const TableFilters = ({ setData, setFilters }: { setData: (data: any[]) => void;
             fullWidth
             id='select-plan'
             value={subscriptionType}
-            onChange={e => setSubscriptionType(e.target.value)}
+            onChange={e => setSubscriptionType(e.target.value as SubscriptionType)}
             SelectProps={{ displayEmpty: true }}
           >
             <MenuItem value=''>All Plans</MenuItem>
-            <MenuItem value='free'>Moments</MenuItem>
-            <MenuItem value='monthly'>Moments Deluxe (Monthly)</MenuItem>
-            <MenuItem value='annual'>Moments Deluxe (Annual)</MenuItem>
+            {plansList.map((plan, index) => (
+              <MenuItem value={plan.value} key={index}>
+                {plan.label}
+              </MenuItem>
+            ))}
           </CustomTextField>
         </Grid>
         <Grid item xs={12} sm={3}>

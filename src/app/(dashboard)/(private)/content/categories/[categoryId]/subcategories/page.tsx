@@ -31,8 +31,6 @@ export default function Page() {
     //@ts-ignore
     if (!category) {
       console.log('No categoryId')
-
-      //   push('/content/categories')
       trigger()
     }
   }, [category, trigger])

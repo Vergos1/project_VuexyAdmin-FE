@@ -1,7 +1,7 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import Image from 'next/image'
 
@@ -13,6 +13,13 @@ import { Avatar, Button, Card, CardActions, CardContent, CardHeader, Divider, Ty
 import type { ThemeColor } from '@/@core/types'
 import OpenDialogOnElementClick from '@/components/dialogs/OpenDialogOnElementClick'
 import ActionModal from '@/components/dialogs/action-modal'
+import { useChangePostStatusByIdMutation, useGetPostInfoByIdQuery } from '@/store/slices/moderation/moderationApi'
+import { getFullName } from '@/utils/getFullName'
+import { getAvatar } from '@/utils/getAvatar'
+import {
+  useChangeUserStatusByIdMutation,
+  useLazyGetUserInfoByIdQuery
+} from '@/store/slices/userManagement/userManagementApi'
 
 const buttonProps = (
   children: string | ReactNode,
@@ -31,18 +38,55 @@ const images = [
   '/images/illustrations/moderation/block-3.png'
 ]
 
-const UserPost = () => {
+const UserPost = ({ postId }: { postId: string }) => {
+  const { data: postData } = useGetPostInfoByIdQuery(postId)
+  const [changeUserStatusById] = useChangeUserStatusByIdMutation()
+  const [changePostStatusById] = useChangePostStatusByIdMutation()
+  const [getUserInfoById, { data: userInfoData }] = useLazyGetUserInfoByIdQuery()
+
   const router = useRouter()
-
+  const [postInfo, setPostInfo] = useState<any>({})
+  const [userInfo, setUserInfo] = useState<any>({})
   const [status, setStatus] = useState<'active' | 'blocked'>('blocked')
-  const [userStatus, setUserStatus] = useState<'active' | 'blocked'>('blocked')
 
-  const handleChangeUserStatus = () => {
-    setUserStatus(userStatus === 'active' ? 'blocked' : 'active')
+  useEffect(() => {
+    if (postData) {
+      setPostInfo(postData)
+      getUserInfoById(postData.userId)
+    }
+  }, [postData, getUserInfoById])
+
+  useEffect(() => {
+    if (userInfoData) {
+      setUserInfo(userInfoData)
+    }
+  }, [userInfoData])
+
+  useEffect(() => {
+    if (postInfo.userId && !userInfoData) {
+      getUserInfoById(postInfo.userId)
+    }
+  }, [postInfo.userId, userInfoData, getUserInfoById])
+
+  console.log('user info', userInfo)
+  console.log('data', postInfo)
+
+  const handleChangePostStatus = async () => {
+    try {
+      await changePostStatusById(postData.id).unwrap()
+      getUserInfoById(postData.userId) // Refresh user info after status change
+    } catch (error) {
+      console.error('Failed to change post status:', error)
+    }
   }
 
-  const handleChangeStatus = () => {
-    setStatus(status === 'active' ? 'blocked' : 'active')
+  const handleChangeUserStatus = async (id: string) => {
+    try {
+      await changeUserStatusById(id).unwrap()
+      getUserInfoById(postInfo.userId) // Refresh user info after status change
+    } catch (error) {
+      console.error('Failed to block user:', error)
+    }
   }
 
   return (
@@ -53,11 +97,11 @@ const UserPost = () => {
         </Button>
       </div>
       <Card>
-        <CardHeader title={<Typography variant='h5'>My work process</Typography>} />
+        <CardHeader title={<Typography variant='h5'>{postInfo?.title || 'No title'}</Typography>} />
         <CardContent>
           <div className='border rounded-md'>
             <div className='px-2 pt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
-              {images.map((image, index) => (
+              {postInfo?.imagesUrls?.map((image: string, index: number) => (
                 <div key={index} className='relative w-full h-40 min-[420px]:h-52 sm:h-56 md:h-64'>
                   <Image
                     src={image}
@@ -74,32 +118,30 @@ const UserPost = () => {
               <div className='flex flex-col gap-6'>
                 <div className='flex flex-col gap-4'>
                   <Typography variant='h5'>Transcription</Typography>
-                  <Typography variant='body1'>
-                    It was such a great time to be able to visit my ftiends in Denver. I flew into the airport on
-                    Tuesday and we immediately headed off to the Winter Park resort. The snow was amazing and we were
-                    able to have a great dinner before we hit the slopes early on Friday - boy it was great to get
-                    skiing again. It was so great to hang out with Emily again - on and off the slopers - she’s moving
-                    and shaking. A hilarious part of the trip was us troubleshooting an extremely hot hotel room. Thank
-                    heavens we finally got to opening thee windows. I never thought I would sleep with cool fresh air of
-                    9 degrees. Yes, there was a beanie involved! We headed back to Denver and hung out with Jamie and
-                    the pups - oh so much fun was had! Such an amazing time, I can’t wait to go back.
-                  </Typography>
+                  <Typography variant='body1'>{postInfo?.transcription || 'No transcription'}</Typography>
                 </div>
                 <Divider />
                 <div className='flex flex-col gap-4'>
                   <Typography variant='h5'>Tags</Typography>
-                  <Typography variant='body1'>#summer #bali #seafood #vacation #mymay</Typography>
+                  <Typography variant='body1'>
+                    {postInfo?.tags?.map((tag: { id: string; name: string }) => `#${tag.name}`) || 'No tags'}
+                  </Typography>
                 </div>
                 <Divider />
                 <div className='flex flex-col gap-4'>
                   <Typography variant='h5'>Author</Typography>
                   <div className='flex items-center gap-4'>
-                    <Avatar src={`/images/avatars/1.png`} alt='avatar' />
+                    {getAvatar({
+                      avatar: '',
+                      firstName: postInfo?.firstName || 'User',
+                      lastName: postInfo?.lastName || '',
+                      size: 40
+                    })}
                     <div className='flex flex-col'>
                       <Typography color='text.primary' className='font-medium'>
-                        Joseph Oliver
+                        {getFullName(postInfo?.firstName, postInfo?.lastName) || 'No name'}
                       </Typography>
-                      <Typography variant='body2'>joseph.87@gmail.com</Typography>
+                      <Typography variant='body2'>{postInfo?.email || 'No email'}</Typography>
                     </div>
                   </div>
                 </div>
@@ -122,26 +164,26 @@ const UserPost = () => {
                 status === 'blocked'
                   ? 'Are you sure you want to unblock this post?'
                   : 'Are you sure you want to block this post?',
-              onSubmit: handleChangeStatus,
+              onSubmit: () => handleChangePostStatus(),
               actionText: status === 'blocked' ? 'Unblock' : 'Block'
             }}
           />
           <OpenDialogOnElementClick
             element={Button}
             elementProps={
-              userStatus === 'blocked'
+              userInfo?.status === 'blocked'
                 ? buttonProps('Unblock User', 'error', 'contained')
                 : buttonProps('Block User', 'error', 'contained')
             }
             dialog={ActionModal}
             dialogProps={{
-              title: userStatus === 'blocked' ? 'Confirm user unblocking' : 'Confirm user blocking',
+              title: userInfo?.status === 'blocked' ? 'Confirm user unblocking' : 'Confirm user blocking',
               text:
-                status === 'blocked'
+                userInfo?.status === 'blocked'
                   ? 'Are you sure you want to unblock user?'
                   : 'Are you sure you want to block user?',
-              onSubmit: handleChangeUserStatus,
-              actionText: userStatus === 'blocked' ? 'Unblock' : 'Block'
+              onSubmit: () => handleChangeUserStatus(postInfo?.userId),
+              actionText: userInfo?.status === 'blocked' ? 'Unblock' : 'Block'
             }}
           />
         </CardActions>
