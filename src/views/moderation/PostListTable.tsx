@@ -3,8 +3,9 @@
 // React Imports
 import { useState, useMemo } from 'react'
 
-// MUI Imports
+import { useRouter } from 'next/navigation'
 
+// MUI Imports
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
 import Typography from '@mui/material/Typography'
@@ -37,16 +38,13 @@ import CustomAvatar from '@core/components/mui/Avatar'
 import type { ThemeColor } from '@core/types'
 
 // Component Imports
-
 import TablePaginationComponent from '@/components/TablePaginationComponent'
-
-// Util Imports
-import { getInitials } from '@/utils/getInitials'
 
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
 import { getFullName } from '@/utils/getFullName'
 import { getAvatar } from '@/utils/getAvatar'
+import { useChangePostStatusByIdMutation } from '@/store/slices/moderation/moderationApi'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -87,10 +85,23 @@ const postStatusObj: PostStatusType = {
 const columnHelper = createColumnHelper<UsersTypeWithAction>()
 
 const PostListTable = ({ tableData, tableType = 'new' }: { tableData?: any[]; tableType?: 'new' | 'reviewed' }) => {
+  const router = useRouter()
+  const [changePostStatusById] = useChangePostStatusByIdMutation()
+
   // States
   const [rowSelection, setRowSelection] = useState({})
 
   const [globalFilter, setGlobalFilter] = useState('')
+
+  const handleChangePostStatus = async ({ postId = '', status = 'reviewed' }) => {
+    console.log(`Changing status for post with ID: ${postId}`)
+
+    try {
+      await changePostStatusById({ postId, status }).unwrap()
+    } catch (error) {
+      console.error('Failed to change post status:', error)
+    }
+  }
 
   const columns = useMemo<ColumnDef<UsersTypeWithAction, any>[]>(
     () => [
@@ -116,7 +127,11 @@ const PostListTable = ({ tableData, tableType = 'new' }: { tableData?: any[]; ta
         header: 'Post',
         cell: ({ row }) => (
           <div className='flex items-center gap-2'>
-            <Link underline='hover' href={`/moderation/${tableType}?postId=${row.original.id}`}>
+            <Link
+              underline='hover'
+              onClick={() => handleChangePostStatus({ postId: row.original.id })}
+              href={`/moderation/${tableType}?postId=${row.original.id}`}
+            >
               View post
             </Link>
           </div>

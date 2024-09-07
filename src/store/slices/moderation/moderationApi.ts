@@ -21,9 +21,10 @@ export const moderationApi = createApi({
       })
     }),
     changePostStatusById: builder.mutation({
-      query: (postId: string) => ({
+      query: ({ postId, status }) => ({
         url: `memories/status/${postId}`,
-        method: 'POST'
+        method: 'POST',
+        body: { status }
       }),
       invalidatesTags: ['memories']
     })

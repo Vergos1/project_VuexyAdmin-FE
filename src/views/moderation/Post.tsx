@@ -39,7 +39,7 @@ const images = [
 ]
 
 const UserPost = ({ postId }: { postId: string }) => {
-  const { data: postData } = useGetPostInfoByIdQuery(postId)
+  const { data: postData, refetch: refetchPostData } = useGetPostInfoByIdQuery(postId)
   const [changeUserStatusById] = useChangeUserStatusByIdMutation()
   const [changePostStatusById] = useChangePostStatusByIdMutation()
   const [getUserInfoById, { data: userInfoData }] = useLazyGetUserInfoByIdQuery()
@@ -47,7 +47,6 @@ const UserPost = ({ postId }: { postId: string }) => {
   const router = useRouter()
   const [postInfo, setPostInfo] = useState<any>({})
   const [userInfo, setUserInfo] = useState<any>({})
-  const [status, setStatus] = useState<'active' | 'blocked'>('blocked')
 
   useEffect(() => {
     if (postData) {
@@ -73,16 +72,21 @@ const UserPost = ({ postId }: { postId: string }) => {
 
   const handleChangePostStatus = async () => {
     try {
-      await changePostStatusById(postData.id).unwrap()
+      const newStatus = postData?.status === 'blocked' ? 'reviewed' : 'blocked'
+
+      await changePostStatusById({ postId: postData.id, status: newStatus }).unwrap()
+
       getUserInfoById(postData.userId) // Refresh user info after status change
+
+      refetchPostData()
     } catch (error) {
       console.error('Failed to change post status:', error)
     }
   }
 
-  const handleChangeUserStatus = async (id: string) => {
+  const handleChangeUserStatus = async () => {
     try {
-      await changeUserStatusById(id).unwrap()
+      await changeUserStatusById(postInfo.userId).unwrap()
       getUserInfoById(postInfo.userId) // Refresh user info after status change
     } catch (error) {
       console.error('Failed to block user:', error)
@@ -97,14 +101,14 @@ const UserPost = ({ postId }: { postId: string }) => {
         </Button>
       </div>
       <Card>
-        <CardHeader title={<Typography variant='h5'>{postInfo?.title || 'No title'}</Typography>} />
+        <CardHeader title={<Typography variant='h5'>{postInfo?.name || 'No title'}</Typography>} />
         <CardContent>
           <div className='border rounded-md'>
             <div className='px-2 pt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
               {postInfo?.imagesUrls?.map((image: string, index: number) => (
                 <div key={index} className='relative w-full h-40 min-[420px]:h-52 sm:h-56 md:h-64'>
                   <Image
-                    src={image}
+                    src={`http://localhost:3000/${image}.jpg`}
                     alt={`block-${index + 1}`}
                     layout='fill'
                     objectFit='cover'
@@ -124,7 +128,7 @@ const UserPost = ({ postId }: { postId: string }) => {
                 <div className='flex flex-col gap-4'>
                   <Typography variant='h5'>Tags</Typography>
                   <Typography variant='body1'>
-                    {postInfo?.tags?.map((tag: { id: string; name: string }) => `#${tag.name}`) || 'No tags'}
+                    {postInfo?.tags?.map((tag: { id: string; name: string }) => `${tag.name}`) || 'No tags'}
                   </Typography>
                 </div>
                 <Divider />
@@ -153,19 +157,19 @@ const UserPost = ({ postId }: { postId: string }) => {
           <OpenDialogOnElementClick
             element={Button}
             elementProps={
-              status === 'blocked'
+              postData?.status === 'blocked'
                 ? buttonProps('Unblock Post', 'error', 'outlined')
                 : buttonProps('Block Post', 'error', 'outlined')
             }
             dialog={ActionModal}
             dialogProps={{
-              title: status === 'blocked' ? 'Confirm post unblocking' : 'Confirm post blocking',
+              title: postData?.status === 'blocked' ? 'Confirm post unblocking' : 'Confirm post blocking',
               text:
-                status === 'blocked'
+                postData?.status === 'blocked'
                   ? 'Are you sure you want to unblock this post?'
                   : 'Are you sure you want to block this post?',
               onSubmit: () => handleChangePostStatus(),
-              actionText: status === 'blocked' ? 'Unblock' : 'Block'
+              actionText: postData?.status === 'blocked' ? 'Unblock' : 'Block'
             }}
           />
           <OpenDialogOnElementClick
@@ -182,7 +186,7 @@ const UserPost = ({ postId }: { postId: string }) => {
                 userInfo?.status === 'blocked'
                   ? 'Are you sure you want to unblock user?'
                   : 'Are you sure you want to block user?',
-              onSubmit: () => handleChangeUserStatus(postInfo?.userId),
+              onSubmit: handleChangeUserStatus,
               actionText: userInfo?.status === 'blocked' ? 'Unblock' : 'Block'
             }}
           />

@@ -14,6 +14,22 @@ const nextConfig = {
         locale: false
       }
     ]
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '3000',
+        pathname: '/**'
+      },
+      {
+        protocol: 'https',
+        hostname: 'project-vuexy-admin-fe.vercel.app',
+        port: '',
+        pathname: '/**'
+      }
+    ]
   }
 }
 
